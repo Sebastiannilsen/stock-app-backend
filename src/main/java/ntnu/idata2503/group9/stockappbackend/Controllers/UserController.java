@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.json.JSONException;
-
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -74,7 +73,7 @@ public class UserController {
      * Endpoint that creates a new user.
      * @param user the body of user that you want to create.
      * @return HTTP status CREATED if created, if not the INTERNAL_SERVER_ERROR.
-     * @exception JSONException  if an error occurs while deleting the user.
+     * @exception JSONException  if an error occurs while creating the user.
      */
     @PostMapping("")
     public ResponseEntity<User> createUser(@RequestBody User user) {
@@ -95,7 +94,7 @@ public class UserController {
      * @param id the id of the user that you want to update.
      * @param user the new user that you want the old user to be updated to.
      * @return HTTP status OK if updated, if not INTERNAL_SERVER_ERROR.
-     * @exception JSONException  if an error occurs while deleting the user.
+     * @exception JSONException  if an error occurs while updating the user.
      */
     @PutMapping("")
     public ResponseEntity updateUser(@PathVariable long id, @RequestBody User user) {
