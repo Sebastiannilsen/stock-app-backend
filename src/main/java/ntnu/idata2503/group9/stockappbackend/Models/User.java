@@ -25,14 +25,19 @@ public class User {
     @JsonManagedReference(value = "user-list")
     private Set<List> lists = new HashSet<>();
 
+    @OneToOne(mappedBy = "user")
+    @JsonManagedReference(value = "user-portfolio")
+    private Portfolio portfolio;
+
     /**
      * Constructor for user.
      * @param email the email of the user.
      * @param password the password for the user.
      */
-    public User(String email, String password) {
+    public User(String email, String password, Portfolio portfolio) {
         setEmail(email);
         setPassword(password);
+        setPortfolio(portfolio);
     }
 
     /**
@@ -72,6 +77,10 @@ public class User {
         return this.lists;
     }
 
+    public Portfolio getPortfolio(){
+        return this.portfolio;
+    }
+
     /**
      * Sets the email of the user
      * @param email email you want to set
@@ -86,6 +95,14 @@ public class User {
      */
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    /**
+     * Sets the portfolio
+     * @param portfolio the portfolio you want to set
+     */
+    public void setPortfolio(Portfolio portfolio) {
+        this.portfolio = portfolio;
     }
 
     /**
