@@ -53,6 +53,11 @@ public class UserService {
         return user != null && user.isValid();
     }
 
+    /**
+     * Added a user to the user repository.
+     * @param user the user you want to add
+     * @return boolean statement. True if added, false if not.
+     */
     public boolean add(User user) {
         boolean added = false;
         if(canBeAdded(user)) {

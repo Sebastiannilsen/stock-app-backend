@@ -1,6 +1,9 @@
 package ntnu.idata2503.group9.stockappbackend.Models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Class that represent a user
@@ -13,9 +16,14 @@ public class User {
 
     @Id
     @GeneratedValue
-    long Uid;
-    String email;
-    String password;
+    private long Uid;
+    private String email;
+    private String password;
+
+    @ManyToOne
+    @JoinColumn(name = "user")
+    @JsonManagedReference(value = "user-list")
+    private Set<List> lists = new HashSet<>();
 
     /**
      * Constructor for user.
@@ -57,8 +65,16 @@ public class User {
     }
 
     /**
+     * Return lists.
+     * @return lists.
+     */
+    public Set<List> getLists() {
+        return this.lists;
+    }
+
+    /**
      * Sets the email of the user
-     * @param email
+     * @param email email you want to set
      */
     public void setEmail(String email) {
         this.email = email;
@@ -66,7 +82,7 @@ public class User {
 
     /**
      * Sets the password of the user
-     * @param password
+     * @param password password you want to set
      */
     public void setPassword(String password) {
         this.password = password;

@@ -2,6 +2,9 @@ package ntnu.idata2503.group9.stockappbackend.Models;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Represents a stock
  */
@@ -13,6 +16,9 @@ public class Stock {
     private String name;
     private double price;
     private double percentChangeIntraday;
+    
+    @ManyToMany(mappedBy = "list")
+    private final Set<List> lists = new HashSet<>();
 
     /**
      * Constructor for a stock
