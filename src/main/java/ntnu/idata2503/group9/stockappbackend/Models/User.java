@@ -14,6 +14,8 @@ import java.util.Set;
 @Table (name = "User")
 public class User {
 
+    private boolean active = true;
+
     @Id
     @GeneratedValue
     private long Uid;
@@ -34,10 +36,9 @@ public class User {
      * @param email the email of the user.
      * @param password the password for the user.
      */
-    public User(String email, String password, Portfolio portfolio) {
+    public User(String email, String password) {
         setEmail(email);
         setPassword(password);
-        setPortfolio(portfolio);
     }
 
     /**
@@ -111,5 +112,23 @@ public class User {
      */
     public boolean isValid() {
         return !" ".equals(this.email) && !" ".equals(this.password);
+    }
+
+    /**
+     * Checks if the user is active
+     * Used for security
+     * @return Boolean statement. True if active, false if not
+     */
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
+     * Sets if the user is active or not.
+     * Used for security
+     * @param active Set boolean statement. Set true if user is active, set false if not
+     */
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
