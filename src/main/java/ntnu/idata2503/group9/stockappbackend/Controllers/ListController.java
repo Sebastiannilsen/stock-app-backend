@@ -58,7 +58,7 @@ public class ListController {
      * Endpoint that creates a new list.
      * @param list the body of list that you want to create.
      * @return HTTP status CREATED if created, if not the INTERNAL_SERVER_ERROR.
-     * @exception JSONException  if an error occurs while deleting the list.
+     * @exception JSONException  if an error occurs while creating the list.
      */
     @PostMapping("")
     public ResponseEntity<ntnu.idata2503.group9.stockappbackend.Models.List> createList(@RequestBody ntnu.idata2503.group9.stockappbackend.Models.List list) {
@@ -79,7 +79,7 @@ public class ListController {
      * @param id the id of the list that you want to update.
      * @param list the new list that you want the old user to be updated to.
      * @return HTTP status OK if updated, if not INTERNAL_SERVER_ERROR.
-     * @exception JSONException  if an error occurs while deleting the list.
+     * @exception JSONException  if an error occurs while updating the list.
      */
     @PutMapping("")
     public ResponseEntity updateList(@PathVariable long id, @RequestBody ntnu.idata2503.group9.stockappbackend.Models.List list) {

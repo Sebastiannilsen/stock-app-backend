@@ -14,6 +14,8 @@ import java.util.Set;
 @Table (name = "User")
 public class User {
 
+    private boolean active = true;
+
     @Id
     @GeneratedValue
     private long Uid;
@@ -24,6 +26,10 @@ public class User {
     @JoinColumn(name = "user")
     @JsonManagedReference(value = "user-list")
     private Set<List> lists = new HashSet<>();
+
+    @OneToOne(mappedBy = "user")
+    @JsonManagedReference(value = "user-portfolio")
+    private Portfolio portfolio;
 
     /**
      * Constructor for user.
@@ -72,6 +78,10 @@ public class User {
         return this.lists;
     }
 
+    public Portfolio getPortfolio(){
+        return this.portfolio;
+    }
+
     /**
      * Sets the email of the user
      * @param email email you want to set
@@ -89,10 +99,36 @@ public class User {
     }
 
     /**
+     * Sets the portfolio
+     * @param portfolio the portfolio you want to set
+     */
+    public void setPortfolio(Portfolio portfolio) {
+        this.portfolio = portfolio;
+    }
+
+    /**
      * Checks if the user is valid
      * @return boolean. True if valid, false if not.
      */
     public boolean isValid() {
         return !" ".equals(this.email) && !" ".equals(this.password);
+    }
+
+    /**
+     * Checks if the user is active
+     * Used for security
+     * @return Boolean statement. True if active, false if not
+     */
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
+     * Sets if the user is active or not.
+     * Used for security
+     * @param active Set boolean statement. Set true if user is active, set false if not
+     */
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

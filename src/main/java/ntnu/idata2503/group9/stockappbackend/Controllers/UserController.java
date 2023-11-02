@@ -1,14 +1,22 @@
 package ntnu.idata2503.group9.stockappbackend.Controllers;
 
 import ntnu.idata2503.group9.stockappbackend.Models.User;
+import ntnu.idata2503.group9.stockappbackend.Security.JwtUtil;
+import ntnu.idata2503.group9.stockappbackend.Services.AccessUserService;
 import ntnu.idata2503.group9.stockappbackend.Services.UserService;
+import ntnu.idata2503.group9.stockappbackend.dto.AuthenticationRequest;
+import ntnu.idata2503.group9.stockappbackend.dto.AuthenticationResponse;
+import ntnu.idata2503.group9.stockappbackend.dto.RegisterUserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.json.JSONException;
-
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -24,6 +32,15 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private AccessUserService accessUserService;
 
     private static final String JSONEEXCEPTIONMESSAGE = "The Field(s) in the request is missing or is null";
     private static final String SEVERE = "An error occurred: ";
@@ -72,17 +89,21 @@ public class UserController {
 
     /**
      * Endpoint that creates a new user.
-     * @param user the body of user that you want to create.
+     * @param registerUserDto the body of user that you want to create.
      * @return HTTP status CREATED if created, if not the INTERNAL_SERVER_ERROR.
-     * @exception JSONException  if an error occurs while deleting the user.
+     * @exception JSONException  if an error occurs while creating the user.
      */
     @PostMapping("")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<String> createUser(@RequestBody RegisterUserDto registerUserDto) {
         try {
-            if(!this.userService.add(user)) {
-                return new ResponseEntity("User was not added", HttpStatus.INTERNAL_SERVER_ERROR);
+            String errorMessage = accessUserService.tryCreateNewUser(registerUserDto.getEmail(), registerUserDto.getPassword());
+            ResponseEntity<String> response;
+            if (errorMessage == null) {
+                response = new ResponseEntity<>(HttpStatus.CREATED);
+            } else {
+                response = new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
             }
-            return new ResponseEntity("User was added", HttpStatus.CREATED);
+            return response;
         }
         catch (JSONException e) {
             LOGGER.severe(SEVERE + e.getMessage());
@@ -95,7 +116,7 @@ public class UserController {
      * @param id the id of the user that you want to update.
      * @param user the new user that you want the old user to be updated to.
      * @return HTTP status OK if updated, if not INTERNAL_SERVER_ERROR.
-     * @exception JSONException  if an error occurs while deleting the user.
+     * @exception JSONException  if an error occurs while updating the user.
      */
     @PutMapping("")
     public ResponseEntity updateUser(@PathVariable long id, @RequestBody User user) {
@@ -134,5 +155,25 @@ public class UserController {
             LOGGER.severe(SEVERE + e.getMessage());
             return new ResponseEntity(JSONEEXCEPTIONMESSAGE, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    /**
+     * HTTP POST request to /authenticate
+     *
+     * @param authenticationRequest The request JSON object containing username and password
+     * @return OK + JWT token; Or UNAUTHORIZED
+     */
+    @PostMapping("/api/authenticate")
+    public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest authenticationRequest) {
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    authenticationRequest.getEmail(),
+                    authenticationRequest.getPassword()));
+        } catch (BadCredentialsException e) {
+            return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
+        }
+        final UserDetails userDetails = accessUserService.loadUserByUsername(authenticationRequest.getEmail());
+        final String jwt = jwtUtil.generateToken(userDetails);
+        return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }
 }
