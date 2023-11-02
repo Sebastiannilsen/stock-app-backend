@@ -1,5 +1,6 @@
 package ntnu.idata2503.group9.stockappbackend.Models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -9,9 +10,11 @@ import java.util.Set;
  * Represents a stock
  */
 @Entity
-
+@Table(name = "Stock")
 public class Stock {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String symbol;
     private String name;
     private double price;
@@ -39,6 +42,14 @@ public class Stock {
      */
     public Stock() {
 
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getSymbol() {
