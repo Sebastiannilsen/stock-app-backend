@@ -11,19 +11,25 @@ import java.util.Set;
  * @author Gruppe...
  * @version 1.0
  */
-@Table(name = "List")
+@Table(name = "Lists")
+@Entity
 public class List {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long lid;
     private String name;
 
-    @ManyToMany(mappedBy = "stock")
-    private final Set<Stock> stocks =  new HashSet<>();
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "list_stock",
+            joinColumns = @JoinColumn(name = "list_id"),
+            inverseJoinColumns = @JoinColumn(name = "stock_symbol")
+    )
+    private Set<Stock> stocks = new HashSet<>();
 
-    @OneToMany(mappedBy = "user")
-    @JsonBackReference(value = "user-list")
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     /**
@@ -78,6 +84,10 @@ public class List {
      */
     public Set<Stock> getStocks() {
         return this.stocks;
+    }
+
+    public void setStocks(Set<Stock> stocks) {
+        this.stocks = stocks;
     }
 
     /**

@@ -19,9 +19,9 @@ public class Stock {
     private String name;
     private double price;
     private double percentChangeIntraday;
-    
-    @ManyToMany(mappedBy = "list")
-    private final Set<List> lists = new HashSet<>();
+
+    @ManyToMany(mappedBy = "stocks")
+    private Set<List> lists = new HashSet<>();
 
     /**
      * Constructor for a stock

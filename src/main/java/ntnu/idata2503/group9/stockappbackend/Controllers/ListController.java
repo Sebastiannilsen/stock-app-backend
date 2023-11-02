@@ -45,7 +45,7 @@ public class ListController {
      * @param id the id of the list that you want to return
      * @return the list and HTTP status OK or http status NOT_FOUNd if list was not found
      */
-    @GetMapping("/{id]")
+    @GetMapping("/{id}")
     public ResponseEntity<ntnu.idata2503.group9.stockappbackend.Models.List> getListFromId(@PathVariable long id) {
         ntnu.idata2503.group9.stockappbackend.Models.List list = this.listService.findById(id);
         if(list == null) {

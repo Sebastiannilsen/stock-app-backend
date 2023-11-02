@@ -11,24 +11,25 @@ import java.util.Set;
  * @author Gruppe
  * @version 1.0
  */
-@Table (name = "User")
+@Table(name = "app_user")
+@Entity
 public class User {
 
     private boolean active = true;
 
     @Id
-    @GeneratedValue
-    private long Uid;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long uid;
+
     private String email;
     private String password;
 
-    @ManyToOne
-    @JoinColumn(name = "user")
-    @JsonManagedReference(value = "user-list")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private Set<List> lists = new HashSet<>();
 
-    @OneToOne(mappedBy = "user")
-    @JsonManagedReference(value = "user-portfolio")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
 
     /**
@@ -51,7 +52,7 @@ public class User {
      * @return uid
      */
     public long getUid() {
-        return this.Uid;
+        return this.uid;
     }
 
     /**
@@ -121,6 +122,10 @@ public class User {
      */
     public boolean isActive() {
         return active;
+    }
+
+    public void setLists(Set<List> lists) {
+        this.lists = lists;
     }
 
     /**

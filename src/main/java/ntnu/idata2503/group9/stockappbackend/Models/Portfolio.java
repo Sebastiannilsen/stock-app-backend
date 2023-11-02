@@ -1,18 +1,18 @@
 package ntnu.idata2503.group9.stockappbackend.Models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "portfolio")
 public class Portfolio {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long Pid;
 
-    @OneToOne(mappedBy = "user")
-    @JsonBackReference(value = "user-portfolio")
+    @OneToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     /**
