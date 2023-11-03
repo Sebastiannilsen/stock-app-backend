@@ -1,6 +1,7 @@
 package ntnu.idata2503.group9.stockappbackend.Models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,6 +14,7 @@ public class Portfolio {
 
     @OneToOne
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private User user;
 
     /**
@@ -22,6 +24,11 @@ public class Portfolio {
     public Portfolio(User user) {
         setUser(user);
     }
+
+    /**
+     * Constructor needed for JPA
+     */
+    public Portfolio() {}
 
     /**
      * Sets the user.

@@ -27,7 +27,7 @@ public class PortfolioController {
 
     private static final String JSONEEXCEPTIONMESSAGE = "The Field(s) in the request is missing or is null";
     private static final String SEVERE = "An error occurred: ";
-    private static final Logger LOGGER = Logger.getLogger(UserController.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(PortfolioController.class.getName());
 
     /**
      * Endpoint that returns all portfolios.

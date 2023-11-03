@@ -163,7 +163,7 @@ public class UserController {
      * @param authenticationRequest The request JSON object containing username and password
      * @return OK + JWT token; Or UNAUTHORIZED
      */
-    @PostMapping("/api/authenticate")
+    @PostMapping("/authenticate")
     public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest authenticationRequest) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(

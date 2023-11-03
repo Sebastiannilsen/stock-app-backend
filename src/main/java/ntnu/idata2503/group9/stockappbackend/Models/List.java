@@ -1,6 +1,8 @@
 package ntnu.idata2503.group9.stockappbackend.Models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,6 +23,7 @@ public class List {
     private String name;
 
     @ManyToMany(cascade = CascadeType.ALL)
+    @JsonManagedReference
     @JoinTable(
             name = "list_stock",
             joinColumns = @JoinColumn(name = "list_id"),
@@ -30,6 +33,7 @@ public class List {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private User user;
 
     /**
