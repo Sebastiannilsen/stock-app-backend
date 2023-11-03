@@ -13,8 +13,8 @@ public class Portfolio {
     private long Pid;
 
     @OneToOne
+    @JsonIgnore
     @JoinColumn(name = "user_id")
-    @JsonBackReference
     private User user;
 
     /**

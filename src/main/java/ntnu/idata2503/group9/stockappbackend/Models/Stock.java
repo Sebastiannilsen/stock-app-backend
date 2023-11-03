@@ -23,7 +23,6 @@ public class Stock {
     private double percentChangeIntraday;
 
     @ManyToMany(mappedBy = "stocks")
-    @JsonBackReference
     private Set<List> lists = new HashSet<>();
 
     /**

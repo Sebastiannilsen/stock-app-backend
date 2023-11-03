@@ -1,10 +1,10 @@
 package ntnu.idata2503.group9.stockappbackend.Models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Class that represent a user
@@ -27,13 +27,17 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    @JsonManagedReference
+    @JsonManagedReference(value = "user-list")
     private Set<List> lists = new HashSet<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "portfolio_id")
-    @JsonManagedReference
     private Portfolio portfolio;
+
+    /**
+     * Empty constructor that is needed for JPA
+     */
+    public User () {}
 
     /**
      * Constructor for user.
@@ -44,11 +48,6 @@ public class User {
         setEmail(email);
         setPassword(password);
     }
-
-    /**
-     * Empty constructor that is needed for JPA
-     */
-    public User () {}
 
     /**
      * Returns the user id

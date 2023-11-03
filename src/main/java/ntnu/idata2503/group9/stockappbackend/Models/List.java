@@ -23,7 +23,6 @@ public class List {
     private String name;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JsonManagedReference
     @JoinTable(
             name = "list_stock",
             joinColumns = @JoinColumn(name = "list_id"),
@@ -33,8 +32,13 @@ public class List {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonBackReference
+    @JsonBackReference(value = "user-list")
     private User user;
+
+    /**
+     * Empty constructor that is needed for JPA
+     */
+    public List() {}
 
     /**
      * Constructor for list.
@@ -44,11 +48,6 @@ public class List {
         setName(name);
         setUser(user);
     }
-
-    /**
-     * Empty constructor that is needed for JPA
-     */
-    public List() {}
 
     /**
      * Sets the list name.
