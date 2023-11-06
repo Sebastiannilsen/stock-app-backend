@@ -1,6 +1,7 @@
 package ntnu.idata2503.group9.stockappbackend.Services;
 
 import ntnu.idata2503.group9.stockappbackend.Models.List;
+import ntnu.idata2503.group9.stockappbackend.Models.User;
 import ntnu.idata2503.group9.stockappbackend.Repository.ListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,15 @@ public class ListService {
      */
     public List findById(long id) {
         return this.listRepository.findById(id).orElse(null);
+    }
+
+    /**
+     * Return list by user
+     * @param user the user that you want the list from
+     * @return lists
+     */
+    public Iterable<List> findAllByUser(User user) {
+        return this.listRepository.findAllByUser(user);
     }
 
     /**

@@ -1,6 +1,8 @@
 package ntnu.idata2503.group9.stockappbackend.Controllers;
 
+import ntnu.idata2503.group9.stockappbackend.Models.User;
 import ntnu.idata2503.group9.stockappbackend.Services.ListService;
+import ntnu.idata2503.group9.stockappbackend.Services.UserService;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,9 @@ public class ListController {
 
     @Autowired
     private ListService listService;
+
+    @Autowired
+    private UserService userService;
 
     private static final String JSONEEXCEPTIONMESSAGE = "The Field(s) in the request is missing or is null";
     private static final String SEVERE = "An error occurred: ";
@@ -52,6 +57,16 @@ public class ListController {
             return new ResponseEntity("Didn't find list", HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok(list);
+    }
+
+    @GetMapping("/listsbyuid/{uid}")
+    public ResponseEntity<List<ntnu.idata2503.group9.stockappbackend.Models.List>> getListFormUid(@PathVariable long uid) {
+        User user = this.userService.findById(uid);
+        Iterable<ntnu.idata2503.group9.stockappbackend.Models.List> lists = this.listService.findAllByUser(user);
+        if(!lists.iterator().hasNext()) {
+            return new ResponseEntity("Didn't find lists", HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok((List<ntnu.idata2503.group9.stockappbackend.Models.List>) lists);
     }
 
     /**

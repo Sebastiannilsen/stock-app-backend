@@ -176,4 +176,14 @@ public class UserController {
         final String jwt = jwtUtil.generateToken(userDetails);
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }
+
+    @GetMapping("/sessionuser")
+    public ResponseEntity<?> getSesionUser() {
+        User sessionUser = this.accessUserService.getSessionUser();
+        System.out.println(sessionUser);
+        if(sessionUser == null) {
+            return new ResponseEntity<>("Didnt find user", HttpStatus.UNAUTHORIZED);
+        }
+        return ResponseEntity.ok(sessionUser);
+    }
 }
