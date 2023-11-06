@@ -23,6 +23,7 @@ public class StockSimulationService {
     public StockSimulationService(StockRepository stockRepository) {
         this.stockRepository = stockRepository;
         this.scheduler = Executors.newSingleThreadScheduledExecutor();
+        startSimulation();
     }
 
     public void startSimulation() {
@@ -58,19 +59,26 @@ public class StockSimulationService {
         Stock stock19 = new Stock("SALM", "SalMar ASA", 164.1, +0.24);
         Stock stock20 = new Stock("GJF", "Gjensidige Forsikring ASA", 164.1, -0.24);
         // ... add more stocks
-        stockRepository.saveAll(List.of(stock1, stock2, stock3, stock4, stock5, stock6, stock7, stock8, stock9, stock10,
-                stock11, stock12, stock13, stock14, stock15, stock16, stock17, stock18, stock19, stock20));
+        stockRepository.saveAll(List.of(stock1, stock2, stock3, stock4, stock5, stock6, stock7, stock8, stock9, stock10, stock11, stock12, stock13, stock14, stock15, stock16, stock17, stock18, stock19, stock20));
     }
 
     private void updateStockPrices() {
         List<Stock> stocks = (List<Stock>) stockRepository.findAll();
 
         for (Stock stock : stocks) {
-            double currentPrice = stock.getPrice();
-            double percentageChange = (random.nextDouble() * 0.004) + 0.001; // 0.1% to 0.4% change
-            double priceChange = currentPrice * percentageChange;
+            double currentPrice = stock.getCurrentPrice();
+            double randomFactor = (random.nextDouble() * 0.008) - 0.004; // Random value between -0.4% and 0.4%
+            double priceChange = currentPrice * randomFactor;
             double newPrice = currentPrice + priceChange;
-            stock.setPrice(newPrice);
+
+            // Ensure the new price is not negative or too low
+            double minimumPrice = 1.0; // Set your desired minimum price
+            if (newPrice < minimumPrice) {
+                newPrice = minimumPrice;
+            }
+            double newRoundedPrice = Math.round(newPrice * 100.0) / 100.0;
+            stock.setCurrentPrice(newRoundedPrice);
+            stock.updatePercentChangeIntraday();
             stockRepository.save(stock);
         }
     }

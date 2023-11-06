@@ -1,8 +1,5 @@
 package ntnu.idata2503.group9.stockappbackend.Models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -19,7 +16,8 @@ public class Stock {
     private Long id;
     private String symbol;
     private String name;
-    private double price;
+    private double currentPrice;
+    private double openingPrice;
     private double percentChangeIntraday;
 
     @ManyToMany(mappedBy = "stocks")
@@ -27,15 +25,17 @@ public class Stock {
 
     /**
      * Constructor for a stock
-     * @param symbol id of the stock, e.g. AAPL, TSLA, etc.
-     * @param name name of the stock
-     * @param price current price of the stock in NOK
+     *
+     * @param symbol                id of the stock, e.g. AAPL, TSLA, etc.
+     * @param name                  name of the stock
+     * @param currentPrice          current price of the stock in NOK
      * @param percentChangeIntraday percent change in price since opening
      */
-    public Stock(String symbol, String name, double price, double percentChangeIntraday) {
+    public Stock(String symbol, String name, double currentPrice, double percentChangeIntraday) {
         this.symbol = symbol;
         this.name = name;
-        this.price = price;
+        this.currentPrice = currentPrice;
+        this.openingPrice = currentPrice;
         this.percentChangeIntraday = percentChangeIntraday;
     }
 
@@ -70,19 +70,20 @@ public class Stock {
         this.name = name;
     }
 
-    public double getPrice() {
-        return price;
+    public double getCurrentPrice() {
+        return currentPrice;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setCurrentPrice(double currentPrice) {
+        this.currentPrice = currentPrice;
     }
 
     public double getPercentChangeIntraday() {
         return percentChangeIntraday;
     }
 
-    public void setPercentChangeIntraday(double percentChangeIntraday) {
-        this.percentChangeIntraday = percentChangeIntraday;
+    public void updatePercentChangeIntraday() {
+        double rawPercentChange = (this.currentPrice - this.openingPrice) / this.openingPrice * 100;
+        this.percentChangeIntraday = Math.round(rawPercentChange * 100.0) / 100.0;
     }
 }
