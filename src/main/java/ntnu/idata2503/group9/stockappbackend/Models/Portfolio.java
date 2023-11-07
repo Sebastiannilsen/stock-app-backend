@@ -2,7 +2,11 @@ package ntnu.idata2503.group9.stockappbackend.Models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "portfolio")
@@ -16,6 +20,12 @@ public class Portfolio {
     @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany
+    @JoinColumn(name = "portfolio_id")
+    @JsonManagedReference(value = "portfolio_stockpurchase")
+    private Set<StockPurchase> stockPurchases = new HashSet<>();
+
 
     /**
      * Constructor for portfolio.
@@ -52,6 +62,18 @@ public class Portfolio {
      */
     public long getPid() {
         return this.Pid;
+    }
+
+    public void setPid(long pid) {
+        Pid = pid;
+    }
+
+    public Set<StockPurchase> getStockPurchases() {
+        return stockPurchases;
+    }
+
+    public void setStockPurchases(Set<StockPurchase> stockPurchases) {
+        this.stockPurchases = stockPurchases;
     }
 
     /**

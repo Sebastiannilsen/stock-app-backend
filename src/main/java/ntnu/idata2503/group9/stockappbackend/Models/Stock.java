@@ -1,5 +1,6 @@
 package ntnu.idata2503.group9.stockappbackend.Models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -22,6 +23,11 @@ public class Stock {
 
     @ManyToMany(mappedBy = "stocks")
     private Set<List> lists = new HashSet<>();
+
+    @OneToMany
+    @JoinColumn(name = "stock_id")
+    @JsonManagedReference(value = "stock_stockpurchase")
+    private Set<StockPurchase> stockPurchases = new HashSet<>();
 
     /**
      * Constructor for a stock
@@ -80,6 +86,34 @@ public class Stock {
 
     public double getPercentChangeIntraday() {
         return percentChangeIntraday;
+    }
+
+    public double getOpeningPrice() {
+        return openingPrice;
+    }
+
+    public Set<List> getLists() {
+        return lists;
+    }
+
+    public void setOpeningPrice(double openingPrice) {
+        this.openingPrice = openingPrice;
+    }
+
+    public void setPercentChangeIntraday(double percentChangeIntraday) {
+        this.percentChangeIntraday = percentChangeIntraday;
+    }
+
+    public void setLists(Set<List> lists) {
+        this.lists = lists;
+    }
+
+    public Set<StockPurchase> getStockPurchases() {
+        return stockPurchases;
+    }
+
+    public void setStockPurchases(Set<StockPurchase> stockPurchases) {
+        this.stockPurchases = stockPurchases;
     }
 
     public void updatePercentChangeIntraday() {
