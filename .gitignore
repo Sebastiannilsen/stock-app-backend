@@ -1,10 +1,15 @@
+# Ignore HELP.md and everything in the target folder
 HELP.md
 target/
+
+# Include maven-wrapper.jar in .mvn/wrapper/
 !.mvn/wrapper/maven-wrapper.jar
+
+# Include target folders under src/main/ and src/test/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-### STS ###
+# STS files
 .apt_generated
 .classpath
 .factorypath
@@ -13,13 +18,13 @@ target/
 .springBeans
 .sts4-cache
 
-### IntelliJ IDEA ###
+# IntelliJ IDEA files
 .idea
 *.iws
 *.iml
 *.ipr
 
-### NetBeans ###
+# NetBeans files
 /nbproject/private/
 /nbbuild/
 /dist/
@@ -29,9 +34,10 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### VS Code ###
+# VS Code files
 .vscode/
 /src/main/resources/shipInfoLoginCred.json
 /src/main/resources/barentsWatchAccountKey.json
 
+# Exclude application.properties in src/main/resources/
 src/main/resources/application.properties
