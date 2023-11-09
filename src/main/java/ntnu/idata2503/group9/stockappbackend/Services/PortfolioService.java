@@ -1,9 +1,13 @@
 package ntnu.idata2503.group9.stockappbackend.Services;
 
 import ntnu.idata2503.group9.stockappbackend.Models.Portfolio;
+import ntnu.idata2503.group9.stockappbackend.Models.Stock;
+import ntnu.idata2503.group9.stockappbackend.Models.User;
 import ntnu.idata2503.group9.stockappbackend.Repository.PortfolioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * This class represent the service clas for portfolio
@@ -17,6 +21,9 @@ public class PortfolioService {
 
     @Autowired
     private PortfolioRepository portfolioRepository;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * Returns all portfolio.
@@ -92,5 +99,15 @@ public class PortfolioService {
         if (errorMessage == null) {
             this.portfolioRepository.save(portfolio);
         }
+    }
+
+    /**
+     * Retuns all the stocks that belong to a portfolio
+     * If one stock have been purchase more then one time, it only returns the stock ones.
+     * @return stocks
+     */
+    public List<Stock> findAllUniqueStocks(long uid) {
+        User user = this.userService.findById(uid);
+        return this.portfolioRepository.findUniqueStocksByUid(user.getUid());
     }
 }

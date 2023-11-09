@@ -63,9 +63,6 @@ public class ListController {
     public ResponseEntity<List<ntnu.idata2503.group9.stockappbackend.Models.List>> getListFormUid(@PathVariable long uid) {
         User user = this.userService.findById(uid);
         Iterable<ntnu.idata2503.group9.stockappbackend.Models.List> lists = this.listService.findAllByUser(user);
-        if(!lists.iterator().hasNext()) {
-            return new ResponseEntity("Didn't find lists", HttpStatus.NOT_FOUND);
-        }
         return ResponseEntity.ok((List<ntnu.idata2503.group9.stockappbackend.Models.List>) lists);
     }
 

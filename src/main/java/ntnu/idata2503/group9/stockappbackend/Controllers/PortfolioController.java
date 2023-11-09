@@ -3,6 +3,7 @@ package ntnu.idata2503.group9.stockappbackend.Controllers;
 import ntnu.idata2503.group9.stockappbackend.Models.Portfolio;
 import ntnu.idata2503.group9.stockappbackend.Models.User;
 import ntnu.idata2503.group9.stockappbackend.Services.PortfolioService;
+import ntnu.idata2503.group9.stockappbackend.Services.UserService;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.logging.Logger;
+import ntnu.idata2503.group9.stockappbackend.Models.Stock;
 
 /**
  * Rest controller that controls the endpoints for the portfolio.
@@ -24,6 +26,9 @@ public class PortfolioController {
 
     @Autowired
     private PortfolioService portfolioService;
+
+    @Autowired
+    private UserService userService;
 
     private static final String JSONEEXCEPTIONMESSAGE = "The Field(s) in the request is missing or is null";
     private static final String SEVERE = "An error occurred: ";
@@ -54,6 +59,16 @@ public class PortfolioController {
             return new ResponseEntity("Didn't find portfolio", HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok(portfolio);
+    }
+
+    /**
+     * Endpoint that returns a list of stocks from the portfolio
+     * @return list of stocks.
+     */
+    @GetMapping("/stocks/{uid}")
+    public ResponseEntity<List<Stock>> getAllUniqeStocks(@PathVariable int uid) {
+        User user = this.userService.findById(uid);
+        return ResponseEntity.ok(this.portfolioService.findAllUniqueStocks(user.getUid()));
     }
 
     /**
