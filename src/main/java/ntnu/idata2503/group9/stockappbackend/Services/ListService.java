@@ -61,10 +61,11 @@ public class ListService {
      */
     public boolean add(List list) {
         boolean added = false;
-        if(canBeAdded(list)) {
-            this.listRepository.save(list);
-            added = true;
+        if(!canBeAdded(list) || list.getName().equals("Favorites") || list.getName().equals("favorites")) {
+            return added;
         }
+        this.listRepository.save(list);
+        added = true;
         return added;
     }
 

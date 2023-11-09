@@ -1,7 +1,9 @@
 package ntnu.idata2503.group9.stockappbackend.Services;
 
+import ntnu.idata2503.group9.stockappbackend.Models.List;
 import ntnu.idata2503.group9.stockappbackend.Models.Portfolio;
 import ntnu.idata2503.group9.stockappbackend.Models.User;
+import ntnu.idata2503.group9.stockappbackend.Repository.ListRepository;
 import ntnu.idata2503.group9.stockappbackend.Repository.PortfolioRepository;
 import ntnu.idata2503.group9.stockappbackend.Repository.UserRepository;
 import ntnu.idata2503.group9.stockappbackend.Security.AccessUserDetails;
@@ -39,6 +41,9 @@ public class AccessUserService implements UserDetailsService {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    ListRepository listRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -147,7 +152,9 @@ public class AccessUserService implements UserDetailsService {
         User user = new User(email,createHash(password));
         this.userRepository.save(user);
         Portfolio portfolio = new Portfolio(this.userService.findByEmail(user.getEmail()));
-        portfolioRepository.save(portfolio);
+        this.portfolioRepository.save(portfolio);
+        List list = new List("Favorites", user);
+        this.listRepository.save(list);
     }
 
     /**
