@@ -1,7 +1,9 @@
 package ntnu.idata2503.group9.stockappbackend.Controllers;
 
+import ntnu.idata2503.group9.stockappbackend.Models.Stock;
 import ntnu.idata2503.group9.stockappbackend.Models.User;
 import ntnu.idata2503.group9.stockappbackend.Services.ListService;
+import ntnu.idata2503.group9.stockappbackend.Services.StockService;
 import ntnu.idata2503.group9.stockappbackend.Services.UserService;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ public class ListController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private StockService stockService;
 
     private static final String JSONEEXCEPTIONMESSAGE = "The Field(s) in the request is missing or is null";
     private static final String SEVERE = "An error occurred: ";
@@ -132,5 +137,10 @@ public class ListController {
         }
     }
 
-
+    @PostMapping("/addStock/{lid}")
+    public ResponseEntity addStockToList(@PathVariable long lid, @RequestBody Stock stock) {
+        Stock stock1 = stockService.getStockById(stock.getId());
+        this.listService.addStockToList(lid, stock1);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 }

@@ -1,6 +1,7 @@
 package ntnu.idata2503.group9.stockappbackend.Services;
 
 import ntnu.idata2503.group9.stockappbackend.Models.List;
+import ntnu.idata2503.group9.stockappbackend.Models.Stock;
 import ntnu.idata2503.group9.stockappbackend.Models.User;
 import ntnu.idata2503.group9.stockappbackend.Repository.ListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,5 +104,16 @@ public class ListService {
         if(errorMessage == null) {
             this.listRepository.save(list);
         }
+    }
+
+    /**
+     * Add a stock to the list repository
+     * @param lid id of the list that you want to add the stock to
+     * @param stock the stock you want to add
+     */
+    public void addStockToList( long lid,Stock stock) {
+        List list = findById(lid);
+        list.addStockToList(stock);
+        this.listRepository.save(list);
     }
 }

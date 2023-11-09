@@ -108,4 +108,12 @@ public class List {
     public boolean isValid() {
         return !" ".equals(this.name);
     }
+
+    /**
+     * Add stock to the list
+     * @param stock the stock you want to add
+     */
+    public void addStockToList(Stock stock) {
+        this.stocks.add(stock);
+    }
 }
