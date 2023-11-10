@@ -26,7 +26,7 @@ public class List {
     @JoinTable(
             name = "list_stock",
             joinColumns = @JoinColumn(name = "list_id"),
-            inverseJoinColumns = @JoinColumn(name = "stock_symbol")
+            inverseJoinColumns = @JoinColumn(name = "stock_id")
     )
     private Set<Stock> stocks = new HashSet<>();
 

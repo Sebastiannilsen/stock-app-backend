@@ -1,8 +1,10 @@
 package ntnu.idata2503.group9.stockappbackend.Controllers;
 
 import ntnu.idata2503.group9.stockappbackend.Models.Stock;
+import ntnu.idata2503.group9.stockappbackend.Repository.StockRepository;
 import ntnu.idata2503.group9.stockappbackend.Services.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +17,9 @@ import java.util.List;
 @RequestMapping("/api/stocks")
 public class StockController {
     private final StockService stockService;
+
+    @Autowired
+    private StockRepository stockRepository;
 
     @Autowired
     public StockController(StockService stockService) {
@@ -45,5 +50,12 @@ public class StockController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/lists/{lid}/stocks")
+    public ResponseEntity<List<Stock>> getAllStocksByListsLid(@PathVariable(value = "lid")long lid) {
+        List<Stock> stocks = this.stockRepository.findStocksByListsLid(lid);
+        return new ResponseEntity<>(stocks, HttpStatus.OK);
+    }
+
 }
 

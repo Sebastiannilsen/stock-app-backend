@@ -1,5 +1,6 @@
 package ntnu.idata2503.group9.stockappbackend.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -22,6 +23,7 @@ public class Stock {
     private double percentChangeIntraday;
 
     @ManyToMany(mappedBy = "stocks")
+    @JsonIgnore
     private Set<List> lists = new HashSet<>();
 
     @OneToMany
