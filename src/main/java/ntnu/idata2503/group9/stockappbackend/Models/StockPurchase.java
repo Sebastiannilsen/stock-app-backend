@@ -109,7 +109,7 @@ public class StockPurchase {
     }
 
     public boolean isValid() {
-        return this.date != null  && this.price < 0 && this.stock != null
-                && this.portfolio != null  && this.quantity < 0;
+        return this.date != null && this.price > 0 && this.stock != null
+                && this.portfolio != null && this.quantity > 0;
     }
 }

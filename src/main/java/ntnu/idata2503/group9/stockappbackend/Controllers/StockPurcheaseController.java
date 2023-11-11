@@ -1,7 +1,9 @@
 package ntnu.idata2503.group9.stockappbackend.Controllers;
 
+import ntnu.idata2503.group9.stockappbackend.Models.Stock;
 import ntnu.idata2503.group9.stockappbackend.Models.StockPurchase;
 import ntnu.idata2503.group9.stockappbackend.Services.StockPurchaseService;
+import ntnu.idata2503.group9.stockappbackend.Services.StockService;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,9 @@ public class StockPurcheaseController {
 
     @Autowired
     StockPurchaseService stockPurchaseService;
+
+    @Autowired
+    StockService stockService;
 
     private static final String JSONEEXCEPTIONMESSAGE = "The Field(s) in the request is missing or is null";
     private static final String SEVERE = "An error occurred: ";
@@ -87,5 +92,12 @@ public class StockPurcheaseController {
             LOGGER.severe(SEVERE + e.getMessage());
             return new ResponseEntity(JSONEEXCEPTIONMESSAGE, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/{id}/stockpurchease")
+    public ResponseEntity<StockPurchase> getByStockStockId(@PathVariable long id) {
+        Stock stock = this.stockService.getStockById(id);
+        StockPurchase stockPurchase = this.stockPurchaseService.findByStock(stock);
+        return ResponseEntity.ok(stockPurchase);
     }
 }
