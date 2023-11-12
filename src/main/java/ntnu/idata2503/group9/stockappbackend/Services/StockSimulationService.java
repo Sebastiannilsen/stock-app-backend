@@ -5,6 +5,8 @@ import ntnu.idata2503.group9.stockappbackend.Models.StockHistory;
 import ntnu.idata2503.group9.stockappbackend.Repository.StockHistoryRepository;
 import ntnu.idata2503.group9.stockappbackend.Repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -16,6 +18,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 @Service
+@EnableScheduling
 public class StockSimulationService {
 
     private final StockRepository stockRepository;
@@ -65,7 +68,7 @@ public class StockSimulationService {
         Stock stock19 = new Stock("SALM", "SalMar ASA", 164.1, +0.24);
         Stock stock20 = new Stock("GJF", "Gjensidige Forsikring ASA", 164.1, -0.24);
         // ... add more stocks
-        //stockRepository.saveAll(List.of(stock1, stock2, stock3, stock4, stock5, stock6, stock7, stock8, stock9, stock10, stock11, stock12, stock13, stock14, stock15, stock16, stock17, stock18, stock19, stock20));
+       //stockRepository.saveAll(List.of(stock1, stock2, stock3, stock4, stock5, stock6, stock7, stock8, stock9, stock10, stock11, stock12, stock13, stock14, stock15, stock16, stock17, stock18, stock19, stock20));
     }
 
     private void updateStockPrices() {
@@ -86,8 +89,14 @@ public class StockSimulationService {
             stock.setCurrentPrice(newRoundedPrice);
             stock.updatePercentChangeIntraday();
             stockRepository.save(stock);
+        }
+    }
 
-            StockHistory stockHistory = new StockHistory(newRoundedPrice, new Date(), stock);
+    @Scheduled(fixedRate = 600000)
+    private void updateStockHistory() {
+        List<Stock> stocks = (List<Stock>) stockRepository.findAll();
+        for (Stock stock: stocks) {
+            StockHistory stockHistory = new StockHistory(stock.getCurrentPrice(), new Date(), stock);
             stockHistoryRepository.save(stockHistory);
         }
     }
