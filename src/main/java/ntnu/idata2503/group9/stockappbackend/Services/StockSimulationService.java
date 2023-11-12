@@ -1,10 +1,13 @@
 package ntnu.idata2503.group9.stockappbackend.Services;
 
 import ntnu.idata2503.group9.stockappbackend.Models.Stock;
+import ntnu.idata2503.group9.stockappbackend.Models.StockHistory;
+import ntnu.idata2503.group9.stockappbackend.Repository.StockHistoryRepository;
 import ntnu.idata2503.group9.stockappbackend.Repository.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Executors;
@@ -25,6 +28,9 @@ public class StockSimulationService {
         this.scheduler = Executors.newSingleThreadScheduledExecutor();
         startSimulation();
     }
+
+    @Autowired
+    StockHistoryRepository stockHistoryRepository;
 
     public void startSimulation() {
         // Add 30 different stocks (you can customize this as per your requirements)
@@ -80,6 +86,9 @@ public class StockSimulationService {
             stock.setCurrentPrice(newRoundedPrice);
             stock.updatePercentChangeIntraday();
             stockRepository.save(stock);
+
+            StockHistory stockHistory = new StockHistory((int) (newRoundedPrice * 100), new Date(), stock);
+            stockHistoryRepository.save(stockHistory);
         }
     }
 }

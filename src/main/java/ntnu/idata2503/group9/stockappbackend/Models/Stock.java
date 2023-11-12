@@ -31,6 +31,11 @@ public class Stock {
     @JsonManagedReference(value = "stock_stockpurchase")
     private Set<StockPurchase> stockPurchases = new HashSet<>();
 
+    @OneToMany
+    @JoinColumn(name = "stock_id")
+    @JsonManagedReference(value = "stockhistory-stock")
+    private Set<StockHistory> stockHistories = new HashSet<>();
+
     /**
      * Constructor for a stock
      *
@@ -121,5 +126,13 @@ public class Stock {
     public void updatePercentChangeIntraday() {
         double rawPercentChange = (this.currentPrice - this.openingPrice) / this.openingPrice * 100;
         this.percentChangeIntraday = Math.round(rawPercentChange * 100.0) / 100.0;
+    }
+
+    public Set<StockHistory> getStockHistories() {
+        return stockHistories;
+    }
+
+    public void setStockHistories(Set<StockHistory> stockHistories) {
+        this.stockHistories = stockHistories;
     }
 }
