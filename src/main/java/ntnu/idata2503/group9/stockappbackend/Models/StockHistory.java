@@ -18,7 +18,7 @@ public class StockHistory {
     @GeneratedValue
     long shid;
 
-    private int price;
+    private double price;
     private Date date;
 
     @ManyToOne
@@ -26,7 +26,7 @@ public class StockHistory {
     @JsonBackReference(value = "stockhistory-stock")
     private Stock stock;
 
-    public StockHistory(int price, Date date, Stock stock) {
+    public StockHistory(double price, Date date, Stock stock) {
         setPrice(price);
         setDate(date);
         setStock(stock);
@@ -40,7 +40,7 @@ public class StockHistory {
         return shid;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
@@ -56,7 +56,7 @@ public class StockHistory {
         this.shid = shid;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
