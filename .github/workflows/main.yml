@@ -21,7 +21,6 @@ jobs:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22
         script: |
           cd /home/local/sandekn/stocks/stock-app-backend/
