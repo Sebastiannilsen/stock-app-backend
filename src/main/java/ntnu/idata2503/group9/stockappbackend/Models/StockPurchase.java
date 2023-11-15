@@ -2,6 +2,7 @@ package ntnu.idata2503.group9.stockappbackend.Models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Cascade;
 
 import java.util.Date;
 
@@ -18,7 +19,7 @@ public class StockPurchase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long spid;
+    private Long spid;
 
     private Date date = new Date();
 
@@ -31,8 +32,8 @@ public class StockPurchase {
     @JsonBackReference(value = "stock_stockpurchase")
     private Stock stock;
 
-    @ManyToOne
-    @JoinColumn(name = "portfolio_id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "portfolio_pid")
     @JsonBackReference(value = "portfolio_stockpurchase")
     private Portfolio portfolio;
 
@@ -60,7 +61,7 @@ public class StockPurchase {
 
     }
 
-    public long getSpid() {
+    public Long getSpid() {
         return spid;
     }
 
@@ -84,7 +85,7 @@ public class StockPurchase {
         return portfolio;
     }
 
-    public void setSpid(long spid) {
+    public void setSpid(Long spid) {
         this.spid = spid;
     }
 

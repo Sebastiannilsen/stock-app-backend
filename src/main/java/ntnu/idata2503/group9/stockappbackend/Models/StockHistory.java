@@ -3,12 +3,7 @@ package ntnu.idata2503.group9.stockappbackend.Models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-
-import ntnu.idata2503.group9.stockappbackend.Models.Stock;
 
 @Entity
 @Table(name = "stock_history")
@@ -16,7 +11,7 @@ public class StockHistory {
 
     @Id
     @GeneratedValue
-    long shid;
+    private Long shid;
 
     private double price;
     private Date date;
@@ -25,6 +20,8 @@ public class StockHistory {
     @JoinColumn(name = "stock_id")
     @JsonBackReference(value = "stockhistory-stock")
     private Stock stock;
+
+
 
     public StockHistory(double price, Date date, Stock stock) {
         setPrice(price);
@@ -36,7 +33,7 @@ public class StockHistory {
 
     }
 
-    public long getShid() {
+    public Long getShid() {
         return shid;
     }
 
@@ -52,7 +49,7 @@ public class StockHistory {
         return stock;
     }
 
-    public void setShid(long shid) {
+    public void setShid(Long shid) {
         this.shid = shid;
     }
 

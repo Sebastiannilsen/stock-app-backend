@@ -19,7 +19,7 @@ public class List {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long lid;
+    private Long lid;
     private String name;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -69,7 +69,7 @@ public class List {
      * Returns the list id.
      * @return lid.
      */
-    public long getLid() {
+    public Long getLid() {
         return this.lid;
     }
 

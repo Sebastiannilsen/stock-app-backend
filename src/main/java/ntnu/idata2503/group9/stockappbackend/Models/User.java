@@ -20,7 +20,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long uid;
+    private Long uid;
 
     private String email;
     private String password;
@@ -53,7 +53,7 @@ public class User {
      * Returns the user id
      * @return uid
      */
-    public long getUid() {
+    public Long getUid() {
         return this.uid;
     }
 

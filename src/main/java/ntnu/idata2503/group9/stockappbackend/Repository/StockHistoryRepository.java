@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface StockHistoryRepository extends CrudRepository<StockHistory, Long> {
-    List<StockHistory> findByStockId(long id);
+    List<StockHistory> findByStockId(Long id);
 }

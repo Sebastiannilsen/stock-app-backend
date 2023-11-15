@@ -1,7 +1,9 @@
 package ntnu.idata2503.group9.stockappbackend.Controllers;
 
+import ntnu.idata2503.group9.stockappbackend.Models.Portfolio;
 import ntnu.idata2503.group9.stockappbackend.Models.Stock;
 import ntnu.idata2503.group9.stockappbackend.Models.StockPurchase;
+import ntnu.idata2503.group9.stockappbackend.Services.PortfolioService;
 import ntnu.idata2503.group9.stockappbackend.Services.StockPurchaseService;
 import ntnu.idata2503.group9.stockappbackend.Services.StockService;
 import org.json.JSONException;
@@ -23,6 +25,9 @@ public class StockPurcheaseController {
 
     @Autowired
     StockService stockService;
+
+    @Autowired
+    PortfolioService portfolioService;
 
     private static final String JSONEEXCEPTIONMESSAGE = "The Field(s) in the request is missing or is null";
     private static final String SEVERE = "An error occurred: ";
@@ -49,11 +54,13 @@ public class StockPurcheaseController {
 
     @PostMapping("")
     public ResponseEntity<String> createStockPurchase(@RequestBody StockPurchase stockPurchase) {
+        Portfolio portfolio = this.portfolioService.findById(stockPurchase.getPortfolio().getPid());
+        stockPurchase.setPortfolio(portfolio);
         try {
             if(!this.stockPurchaseService.add(stockPurchase)) {
-                return new ResponseEntity("List was not added", HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity("Stock Purcheas was not added", HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            return new ResponseEntity("List was added", HttpStatus.CREATED);
+            return new ResponseEntity("Stock Purcheas was added", HttpStatus.CREATED);
         }
         catch (JSONException e) {
             LOGGER.severe(SEVERE + e.getMessage());

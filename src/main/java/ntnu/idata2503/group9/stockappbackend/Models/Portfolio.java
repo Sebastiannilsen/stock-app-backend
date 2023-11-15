@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Cascade;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,7 +15,7 @@ public class Portfolio {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long Pid;
+    private Long pid;
 
     @OneToOne
     @JsonIgnore
@@ -22,7 +23,12 @@ public class Portfolio {
     private User user;
 
     @OneToMany
-    @JoinColumn(name = "portfolio_id")
+    @JoinColumn(name = "portfolio_pid")
+    @JsonManagedReference(value = "portfoliohistory-portfolio")
+    private Set<PortfolioHistory> portfolioHistories = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "portfolio_pid")
     @JsonManagedReference(value = "portfolio_stockpurchase")
     private Set<StockPurchase> stockPurchases = new HashSet<>();
 
@@ -60,12 +66,12 @@ public class Portfolio {
      * Returns portfolio id.
      * @return pid.
      */
-    public long getPid() {
-        return this.Pid;
+    public Long getPid() {
+        return this.pid;
     }
 
-    public void setPid(long pid) {
-        Pid = pid;
+    public void setPid(Long pid) {
+        this.pid = pid;
     }
 
     public Set<StockPurchase> getStockPurchases() {
@@ -83,5 +89,15 @@ public class Portfolio {
     public boolean isValid() {
         return this.user != null;
     }
+
+
+    public Set<PortfolioHistory> getPortfolioHistories() {
+        return portfolioHistories;
+    }
+
+    public void setPortfolioHistories(Set<PortfolioHistory> portfolioHistories) {
+        this.portfolioHistories = portfolioHistories;
+    }
+
 
 }

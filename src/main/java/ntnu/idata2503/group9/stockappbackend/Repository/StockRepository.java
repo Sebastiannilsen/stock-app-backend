@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 
 public interface StockRepository extends CrudRepository<Stock, Long> {
-    List<Stock> findStocksByListsLid(long lid);
+    List<Stock> findStocksByListsLid(Long lid);
 }

@@ -1,5 +1,6 @@
 package ntnu.idata2503.group9.stockappbackend.Services;
 
+import ntnu.idata2503.group9.stockappbackend.Models.Portfolio;
 import ntnu.idata2503.group9.stockappbackend.Models.Stock;
 import ntnu.idata2503.group9.stockappbackend.Models.StockPurchase;
 import ntnu.idata2503.group9.stockappbackend.Repository.StockPurchaseRepository;
@@ -19,6 +20,10 @@ public class StockPurchaseService {
     @Autowired
     StockPurchaseRepository stockPurchaseRepository;
 
+    @Autowired
+    PortfolioService portfolioService;
+
+
     public Iterable<StockPurchase> getAll() {
         return this.stockPurchaseRepository.findAll();
     }
@@ -34,6 +39,7 @@ public class StockPurchaseService {
     public boolean add(StockPurchase stockPurchase) {
         boolean added = false;
         if(canBeAdded(stockPurchase)) {
+            Portfolio portfolio = stockPurchase.getPortfolio();
             this.stockPurchaseRepository.save(stockPurchase);
             added = true;
         }
