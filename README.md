@@ -1,28 +1,67 @@
 # stock-app-backend
 
-## Introcution
-This is the backend for StockApp, created by students at NTNU in the course IDATA2503 - Mobile Applications. 
-The backend consist of a REST api buildt in springboot connected to a SQL database. The main purpose of the application is to simulate stock prices at the Oslo stock exchange, and provide this info througt 
-API endpoints. 
+## Introduction
+This is the backend for StockApp, created by students at NTNU in the course IDATA2503 - Mobile Applications. The backend consists of a REST API built in Spring Boot connected to a SQL database. The main purpose of the application is to simulate stock prices at the Oslo stock exchange and provide this information through API endpoints.
 
 ## Functionality
-Loging.
-Creating lists of stocks for monitoring.
-Purchasing stocks. 
-Reading the current stock prices.
+- Logging.
+- Creating lists of stocks for monitoring.
+- Purchasing stocks.
+- Reading the current stock prices.
+- Portfolio history tracking.
+- Stock price history tracking.
+- Stock purchase tracking.
+- User management and authentication.
 
-note that the stock purchases and prices are only simulated and not real data. 
+**Note** that the stock purchases and prices are only simulated, and portfolio, stock price history, stock purchase details, and user authentication are available through additional endpoints.
 
 ## Endpoints
-The REST api supports the following endpoints
+The REST API supports the following endpoints:
 
 1. **("/api/list")**
-  - GET : gets the lists
-  - POST : Creates a list 
-  - GET ("/{id}") :  gets a specific list by the id
-  - GET ("/listsbyuid/{uid}") : gets all list for a specified user by userId
-  - DELETE ("/{id}") : deletes a list by listId
-  - POST ("/addStock/{lid}") : adds a stock to a specified list by listId
-  
+   - GET: Gets the lists.
+   - POST: Creates a list.
+   - GET("/{id}"): Gets a specific list by ID.
+   - GET("/listsbyuid/{uid}"): Gets all lists for a specified user by userID.
+   - DELETE("/{id}"): Deletes a list by listID.
+   - POST("/addStock/{lid}"): Adds a stock to a specified list by listID.
+
 2. **("/api/portfolio")**
-  - 
+   - GET: Returns all portfolios.
+   - GET("/{id}"): Returns a portfolio based on the portfolio ID.
+   - GET("/stocks/{uid}"): Returns a list of unique stocks from the portfolio.
+   - POST: Creates a new portfolio.
+   - PUT("/{id}"): Updates a portfolio.
+   - DELETE("/{id}"): Deletes a portfolio.
+
+3. **("/api/portfoliohistory")**
+   - GET("/portfolios/{pid}"): Returns portfolio history by portfolio ID.
+
+4. **("/api/stocks")**
+   - GET: Returns all stocks.
+   - GET("/{id}"): Returns a stock based on the stock ID.
+   - PUT("/{id}"): Updates a stock.
+   - GET("/lists/{lid}/stocks"): Returns all stocks for a specified list by listID.
+
+5. **("/api/stockhistory")**
+   - GET("/stocks/{id}"): Returns stock price history by stock ID.
+
+6. **("/api/stockpurchase")**
+   - GET: Returns all stock purchases.
+   - GET("/{id}"): Returns a stock purchase based on the stock purchase ID.
+   - POST: Creates a new stock purchase.
+   - PUT("/{id}"): Updates a stock purchase.
+   - DELETE("/{id}"): Deletes a stock purchase.
+   - GET("/{id}/stockpurchase"): Returns a stock purchase by stock ID.
+
+7. **("/api/user")**
+   - GET: Returns all users.
+   - GET("/{id}"): Returns a user based on the user ID.
+   - GET("/{email}"): Returns a user based on the user email.
+   - POST: Creates a new user.
+   - PUT("/{id}"): Updates a user.
+   - DELETE("/{id}"): Deletes a user.
+   - POST("/authenticate"): Authenticates a user and returns a JWT token.
+   - GET("/sessionuser"): Returns the current session user.
+
+
