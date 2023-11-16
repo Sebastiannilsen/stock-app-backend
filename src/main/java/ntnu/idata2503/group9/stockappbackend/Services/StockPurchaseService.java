@@ -1,8 +1,10 @@
 package ntnu.idata2503.group9.stockappbackend.Services;
 
 import ntnu.idata2503.group9.stockappbackend.Models.Portfolio;
+import ntnu.idata2503.group9.stockappbackend.Models.PortfolioHistory;
 import ntnu.idata2503.group9.stockappbackend.Models.Stock;
 import ntnu.idata2503.group9.stockappbackend.Models.StockPurchase;
+import ntnu.idata2503.group9.stockappbackend.Repository.PortfolioHistoryRepository;
 import ntnu.idata2503.group9.stockappbackend.Repository.StockPurchaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,13 +17,17 @@ import org.springframework.stereotype.Service;
  * @version 1.0
  */
 @Service
-public class StockPurchaseService {
+public class
+StockPurchaseService {
 
     @Autowired
     StockPurchaseRepository stockPurchaseRepository;
 
     @Autowired
     PortfolioService portfolioService;
+
+    @Autowired
+    PortfolioHistoryRepository portfolioHistoryRepository;
 
 
     public Iterable<StockPurchase> getAll() {
@@ -40,6 +46,7 @@ public class StockPurchaseService {
         boolean added = false;
         if(canBeAdded(stockPurchase)) {
             Portfolio portfolio = stockPurchase.getPortfolio();
+            PortfolioHistory portfolioHistory = new PortfolioHistory();
             this.stockPurchaseRepository.save(stockPurchase);
             added = true;
         }
