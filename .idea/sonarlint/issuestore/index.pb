@@ -1,6 +1,4 @@
 
-7
-pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
 ‚
 Rsrc/main/java/ntnu/idata2503/group9/stockappbackend/dto/AuthenticationRequest.java,8\c\8cc493c8f1a0931ba5810398a5d39dbf8ed284cf
 ~
