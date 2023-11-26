@@ -1,9 +1,6 @@
 package ntnu.idata2503.group9.stockappbackend.Services;
 
-import ntnu.idata2503.group9.stockappbackend.Models.Portfolio;
-import ntnu.idata2503.group9.stockappbackend.Models.PortfolioHistory;
-import ntnu.idata2503.group9.stockappbackend.Models.Stock;
-import ntnu.idata2503.group9.stockappbackend.Models.StockHistory;
+import ntnu.idata2503.group9.stockappbackend.Models.*;
 import ntnu.idata2503.group9.stockappbackend.Repository.PortfolioHistoryRepository;
 import ntnu.idata2503.group9.stockappbackend.Repository.PortfolioRepository;
 import ntnu.idata2503.group9.stockappbackend.Repository.StockHistoryRepository;
@@ -14,9 +11,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -79,7 +75,10 @@ public class StockSimulationService {
         Stock stock19 = new Stock("SALM", "SalMar ASA", 164.1, +0.24);
         Stock stock20 = new Stock("GJF", "Gjensidige Forsikring ASA", 164.1, -0.24);
         // ... add more stocks
-        //stockRepository.saveAll(List.of(stock1, stock2, stock3, stock4, stock5, stock6, stock7, stock8, stock9, stock10, stock11, stock12, stock13, stock14, stock15, stock16, stock17, stock18, stock19, stock20));
+        if (!stockRepository.findAll().iterator().hasNext()){
+            stockRepository.saveAll(List.of(stock1, stock2, stock3, stock4, stock5, stock6, stock7, stock8, stock9, stock10, stock11, stock12, stock13, stock14, stock15, stock16, stock17, stock18, stock19, stock20));
+        }
+
     }
 
     private void updateStockPrices() {
@@ -119,7 +118,9 @@ public class StockSimulationService {
             List<Stock> stocks = this.portfolioRepository.findUniqueStocksByUid(portfolio.getUser().getUid());
             double price = 0;
             for(Stock stock : stocks) {
-                price = price + stock.getCurrentPrice();
+                Set<StockPurchase> purchases = portfolio.getStockPurchases();
+                StockPurchase currentPurchase = (StockPurchase) purchases.stream().filter(stockPurchase -> Objects.equals(stockPurchase.getSpid(), stock.getId()));
+                price += (currentPurchase.getPrice() - stock.getCurrentPrice());
             }
             DecimalFormat decimalFormat = new DecimalFormat("#.##");
             price = round(price, 2);
