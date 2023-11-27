@@ -112,4 +112,17 @@ public class StockPurchase {
         return this.date != null && this.price > 0 && this.stock != null
                 && this.portfolio != null && this.quantity > 0;
     }
+
+    @Override
+    public String toString(){
+        return "StockPurchase{" +
+                "spid=" + spid +
+                ", date=" + date +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                ", stock=" + stock +
+                ", portfolio=" + portfolio +
+                '}';
+        
+    }
 }

@@ -7,6 +7,7 @@ import ntnu.idata2503.group9.stockappbackend.Services.PortfolioService;
 import ntnu.idata2503.group9.stockappbackend.Services.StockPurchaseService;
 import ntnu.idata2503.group9.stockappbackend.Services.StockService;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ import java.util.logging.Logger;
 
 /**
  * Rest controller that controls the endpoints for the stock purchase.
- * 
+ *
  * @author Gruppe 4
  * @version 1.0
  */
@@ -41,7 +42,7 @@ public class StockPurcheaseController {
 
     /**
      * Endpoint that returns all stock purchases.
-     * 
+     *
      * @return all stock purchases
      */
     @GetMapping("")
@@ -55,10 +56,10 @@ public class StockPurcheaseController {
 
     /**
      * Endpoint that returns a stock purchase based on the stock purchase id
-     * 
+     *
      * @param id the id of the stock purchase that you want to return
      * @return the stock purchase and HTTP status OK or http status NOT_FOUNd if
-     *         stock purchase was not found
+     * stock purchase was not found
      */
     @GetMapping("/{id}")
     public ResponseEntity<StockPurchase> getStockPurcheaseFormId(@PathVariable long id) {
@@ -71,10 +72,10 @@ public class StockPurcheaseController {
 
     /**
      * Endpoint that updates a stock purchase
-     * 
+     *
      * @param stockPurchase the stock purchase that you want to update
      * @return the stock purchase and HTTP status OK or http status NOT_FOUNd if
-     *         stock purchase was not found
+     * stock purchase was not found
      */
     @PostMapping("")
     public ResponseEntity<String> createStockPurchase(@RequestBody StockPurchase stockPurchase) {
@@ -93,11 +94,11 @@ public class StockPurcheaseController {
 
     /**
      * Endpoint that updates a stock purchase based on the stock purchase id
-     * 
+     *
      * @param id            the id of the stock purchase that you want to return
      * @param stockPurchase the stock purchase that you want to update
      * @return the stock purchase and HTTP status OK or http status NOT_FOUNd if
-     *         stock purchase was not found
+     * stock purchase was not found
      */
     @PutMapping("")
     public ResponseEntity<String> updateStock(@PathVariable long id, @RequestBody StockPurchase stockPurchase) {
@@ -119,25 +120,25 @@ public class StockPurcheaseController {
 
     /**
      * Endpoint that deletes a stock purchase based on the stock purchase id
-     * 
-     * @param id the id of the stock purchase that you want to delete
+     *
+     * @param json the id of the stock purchase that you want to delete
      * @return HTTP status OK if deleted, if not INTERNAL_SERVER_ERROR.
      */
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteStockPurchase(@PathVariable long id) {
-        if(stockPurchaseService.findById(id) == null) {
-            try {
-                if (!this.stockPurchaseService.delete(id)) {
-                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("stockPurchase was not removed");
-                }
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<String> deleteStockPurchase(@PathVariable long userId, @RequestBody String json) {
+        JSONObject stockId = new JSONObject(json);
+
+        try {
+            if (!this.stockPurchaseService.delete(userId, stockId.getLong("id"))) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("stockPurchase was not removed");
+            } else {
                 return ResponseEntity.ok("stockPurchase was removed");
-            } catch (JSONException e) {
-                LOGGER.severe(SEVERE + e.getMessage());
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(JSONEEXCEPTIONMESSAGE);
             }
-        }else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("You do not own the stock you are trying to delete");
+        } catch (JSONException e) {
+            LOGGER.severe(SEVERE + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(JSONEEXCEPTIONMESSAGE);
         }
+
     }
 
     /**
@@ -146,7 +147,7 @@ public class StockPurcheaseController {
      * @param id the id of the portfolio that you want to return stock purchases
      *           from
      * @return the stock purchases and HTTP status OK or HTTP status NOT_FOUND if
-     *         stock purchases was not found
+     * stock purchases was not found
      */
     @GetMapping("/{id}/stockpurchease")
     public ResponseEntity<StockPurchase> getByStockStockId(@PathVariable long id) {

@@ -7,6 +7,13 @@ import ntnu.idata2503.group9.stockappbackend.Repository.StockPurchaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+import java.util.stream.StreamSupport;
+
 /**
  * Represent the service class for StockPurchase
  * Handle the logic of StockPurchase repository.
@@ -47,10 +54,16 @@ public class StockPurchaseService {
         return added;
     }
 
-    public boolean delete(long id) {
+
+
+    public boolean delete(long portfolioId, long stockId) {
+        // check if the user owns the stock
+        List<StockPurchase> stockPurchases = StreamSupport.stream(getAll().spliterator(), false)
+                .filter(sp -> sp.getPortfolio().getPid() == portfolioId && sp.getStock().getId() == stockId)
+                .toList();
         boolean deleted = false;
-        if (findById(id) != null) {
-            this.stockPurchaseRepository.deleteById(id);
+        if (!stockPurchases.isEmpty()) {
+            this.stockPurchaseRepository.deleteStockPurchaseById(stockPurchases.get(0).getSpid());
             deleted = true;
         }
         return deleted;
