@@ -10,6 +10,9 @@ import java.util.Set;
 
 /**
  * Contains authentication infromation needed by UserDetailsService
+ *
+ * @author Gruppe 4
+ * @version 1.0
  */
 public class AccessUserDetails implements UserDetails {
 

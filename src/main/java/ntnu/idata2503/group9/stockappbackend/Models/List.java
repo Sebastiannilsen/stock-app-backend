@@ -8,7 +8,7 @@ import java.util.Set;
 /**
  * Class that represent a list.
  *
- * @author Gruppe...
+ * @author Gruppe 4
  * @version 1.0
  */
 @Table(name = "Lists")
@@ -119,5 +119,14 @@ public class List {
      */
     public void addStockToList(Stock stock) {
         this.stocks.add(stock);
+    }
+
+    /**
+     * Removes stock from the list
+     *
+     * @param stock the stock you want to remove
+     */
+    public void removeStockFromList(Stock stock) {
+        this.stocks.remove(stock);
     }
 }

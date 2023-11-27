@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 /**
  * Creates AuthenticationManager - set up authentication type.
  *
- * @author Grupe...
+ * @author Grupe 4
  * @version 1.0
  */
 @Configuration

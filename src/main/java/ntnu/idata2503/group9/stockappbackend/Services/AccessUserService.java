@@ -21,7 +21,7 @@ import java.util.Optional;
 /**
  * Provides AccessUserDetails needed for authentication.
  *
- * @author Gruppe...
+ * @author Gruppe 4
  * @version 1.0
  */
 @Service

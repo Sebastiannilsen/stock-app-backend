@@ -18,7 +18,7 @@ import java.util.List;
  * This class is responsible for simulating stock prices and updating the
  * database.
  * 
- * @author Grupe...
+ * @author Grupe 4
  * @version 1.0
  */
 @Service

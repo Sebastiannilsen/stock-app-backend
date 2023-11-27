@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Rest controller that controls the endpoints for the stock.
  * 
- * @author Gruppe...
+ * @author Gruppe 4
  * @version 1.0
  */
 @RestController

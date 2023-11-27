@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 /**
  * Rest controller that controls the endpoints for the stock purchase.
  * 
- * @author Gruppe...
+ * @author Gruppe 4
  * @version 1.0
  */
 @Controller
