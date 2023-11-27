@@ -80,13 +80,15 @@ public class StockHistoryController {
                 double close = current.getPrice();
                 double low = Math.min(open, close) - offsetLow;
                 double high = Math.max(open, close) + offsetHigh;
+                int volume = (random.nextInt(19) + 1);
 
                 CandlestickData candlestickData = new CandlestickData(
                         open,
                         close,
                         round(low,2),
                         round(high,2),
-                        current.getDate()
+                        current.getDate(),
+                        volume
                 );
 
                 candlestickDataList.add(candlestickData);
