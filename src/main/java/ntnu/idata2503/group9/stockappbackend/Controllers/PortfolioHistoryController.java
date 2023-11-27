@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 /**
@@ -39,10 +41,11 @@ public class PortfolioHistoryController {
     /**
      * Endpoint that returns the value of a portfolio at a given time.
      * @param pid the id of the portfolio that you want to return
-     * @return the value of a portfolio at a given time as monitary change and percentage change
+     * @return the value of a portfolio at a given time as monetary change and percentage change
      */
     @GetMapping("/portfolios/values/{pid}")
-    public ResponseEntity<JSONObject> getPortfolioHistoricValues(@PathVariable long pid) {
+    public ResponseEntity<Object> getPortfolioHistoricValues(@PathVariable long pid) {
+        System.out.println("Endpoint called");
         List<PortfolioHistory> portfolioHistories = this.portfolioHistoryRepository.findByPortfolioPid(pid);
 
         if (portfolioHistories.isEmpty()) {
@@ -57,10 +60,18 @@ public class PortfolioHistoryController {
 
         // Creating a JSON object with keys and values
         JSONObject jsonObject = new JSONObject()
-                .put("monetaryChange", monetaryChange)
-                .put("percentageChange", percentageChange);
+                .put("monetaryChange", round(monetaryChange, 2))
+                .put("percentageChange", round(percentageChange,2));
 
-        return ResponseEntity.ok(jsonObject);
+        return ResponseEntity.ok(jsonObject.toString());
+    }
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = BigDecimal.valueOf(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 
 }
