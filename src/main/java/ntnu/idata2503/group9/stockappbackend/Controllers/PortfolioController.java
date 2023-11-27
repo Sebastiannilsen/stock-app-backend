@@ -18,7 +18,7 @@ import ntnu.idata2503.group9.stockappbackend.Models.Stock;
  * Rest controller that controls the endpoints for the portfolio.
  
  *
- * @author Gruppe...
+ * @author Gruppe 4
  * @version 1.0
  */
 @Controller

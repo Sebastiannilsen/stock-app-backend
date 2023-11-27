@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  * Represent the service class for list.
  * Handle the logic of the list repository.
  *
- * @author Gruppe...
+ * @author Gruppe 4
  * @version 1.0
  */
 @Service
@@ -19,6 +19,9 @@ public class ListService {
 
     @Autowired
     private ListRepository listRepository;
+
+    @Autowired
+    private StockService stockService;
 
     /**
      * Return all lists
@@ -116,4 +119,26 @@ public class ListService {
         list.addStockToList(stock);
         this.listRepository.save(list);
     }
+
+    /**
+     * Remove stock from the list in list repository.
+     * @param lid the id of the list you want a stock to be removed.
+     * @param stock the stock you want to remove.
+     */
+     public void removeStockFromList(long lid, Stock stock) {
+        List list = findById(lid);
+        list.removeStockFromList(stock);
+        this.listRepository.save(list);
+     }
+
+    /**
+     * Set a new name for a list
+     * @param lid the id of the list you want to set a new name.
+     * @param name the name you want to update the list with.
+     */
+     public void updateName(long lid, String name) {
+         List list = findById(lid);
+         list.setName(name);
+         this.listRepository.save(list);
+     }
 }

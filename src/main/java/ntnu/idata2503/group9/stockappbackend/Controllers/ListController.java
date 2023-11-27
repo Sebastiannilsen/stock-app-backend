@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  * 
  * It uses services for list, user, and stock to perform its operations.
  * 
- * @author Gruppe..
+ * @author Gruppe 4
  * @version 1.0
  */
 @Controller
@@ -149,7 +149,7 @@ public class ListController {
      * Endpoint that adds a stock to a list.
      * @param lid the id of the list that you want to add the stock to
      * @param stock the stock that you want to add to the list
-     * @return HTTP status OK if added, if not INTERNAL_SERVER_ERROR.
+     * @return HTTP status OK if added, if not BAD_REQUEST.
      */
     @PostMapping("/addStock/{lid}")
     public ResponseEntity<Object> addStockToList(@PathVariable long lid, @RequestBody Stock stock) {
@@ -162,5 +162,40 @@ public class ListController {
             return new ResponseEntity<>(JSONEEXCEPTIONMESSAGE, HttpStatus.BAD_REQUEST);
         }
         
+    }
+
+    /**
+     * Endpoint that removes stock from a list
+     * @param lid the id of the list you want to remove stock from.
+     * @param stock the stock you want to remove.
+     * @return HTTP status OK if removed, if not BAD_REQUEST.
+     */
+    @DeleteMapping("/removestock/{lid}")
+    public ResponseEntity<Object> removeStockFromList(@PathVariable long lid, @RequestBody Stock stock) {
+        try {
+            Stock stock1 = stockService.getStockById(stock.getId());
+            this.listService.removeStockFromList(lid, stock1);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (JSONException e) {
+            LOGGER.severe(SEVERE + e.getMessage());
+            return new ResponseEntity<>(JSONEEXCEPTIONMESSAGE, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    /**
+     * Endpoint that update the stock list name.
+     * @param lid the id of the stock you want to update
+     * @param name the new name for the list
+     * @return HTTP status OK if updated, if not BAD_REQUEST.
+     */
+    @PutMapping("listname/{lid}")
+    public ResponseEntity<Object> updateListName(@PathVariable long lid, @RequestBody String name) {
+        try {
+            this.listService.updateName(lid, name);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (JSONException e) {
+            LOGGER.severe(SEVERE + e.getMessage());
+            return new ResponseEntity<>(JSONEEXCEPTIONMESSAGE, HttpStatus.BAD_REQUEST);
+        }
     }
 }

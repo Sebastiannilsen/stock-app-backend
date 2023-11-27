@@ -7,7 +7,7 @@ import java.util.Date;
 /**
  * Class that represent a stock history.
  * 
- * @author Gruppe...
+ * @author Gruppe 4
  * @version 1.0
  */
 @Entity

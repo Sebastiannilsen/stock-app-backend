@@ -13,7 +13,7 @@ import java.util.List;
  * This class represent the service clas for portfolio
  * Handle the logic of the portfolio repository
  *
- * @author gruppe...
+ * @author gruppe 4
  * @version 1.0
  */
 @Service

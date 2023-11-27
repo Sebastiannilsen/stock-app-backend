@@ -12,6 +12,9 @@ import java.util.function.Function;
 
 /**
  * Utility class for handling JWT tokens
+ *
+ * @author gruppe 4
+ * @version 1.0
  */
 @Component
 public class JwtUtil {

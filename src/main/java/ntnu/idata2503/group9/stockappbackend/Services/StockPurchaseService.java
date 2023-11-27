@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  * Represent the service class for StockPurchase
  * Handle the logic of StockPurchase repository.
  *
- * @author Gruppe..
+ * @author Gruppe 4
  * @version 1.0
  */
 @Service

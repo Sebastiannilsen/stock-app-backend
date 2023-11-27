@@ -9,6 +9,9 @@ import java.util.Set;
 
 /**
  * Represents a stock
+ *
+ * @author Gruppe 4
+ * @version 1.0
  */
 @Entity
 @Table(name = "Stock")

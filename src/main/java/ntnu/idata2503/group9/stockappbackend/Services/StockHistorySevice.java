@@ -7,6 +7,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Service class for stock history
+ *
+ * @author gruppe 4
+ * @version 1.0
+ */
 @Service
 public class StockHistorySevice {
 

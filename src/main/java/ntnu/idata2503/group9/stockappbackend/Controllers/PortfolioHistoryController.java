@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Rest controller that controls the endpoints for the portfolio history.
  *
- * @author Gruppe...
+ * @author Gruppe 4
  * @version 1.0
  */
 @Controller

@@ -10,7 +10,7 @@ import java.util.Set;
 /**
  * Class that represent a portfolio.
  * 
- * @author Gruppe...
+ * @author Gruppe 4
  * @version 1.0
  */
 @Entity

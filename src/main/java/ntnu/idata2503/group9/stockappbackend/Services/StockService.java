@@ -9,6 +9,9 @@ import java.util.List;
 
 /**
  * Represent the service class for Stock
+ *
+ * @author Gruppe 4
+ * @version 1.0
  */
 @Service
 public class StockService {

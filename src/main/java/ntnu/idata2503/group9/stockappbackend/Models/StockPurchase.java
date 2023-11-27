@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * This class represent the Stock Purchase
  *
- * @author gruppe 9
+ * @author gruppe 4
  * @version 1.0
  */
 
