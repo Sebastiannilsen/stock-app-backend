@@ -66,28 +66,29 @@ public class PortfolioController {
      * @return list of stocks.
      */
     @GetMapping("/stocks/{uid}")
-    public ResponseEntity<List<Stock>> getAllUniqeStocks(@PathVariable int uid) {
+    public ResponseEntity<List<Stock>> getAllUniqueStocks(@PathVariable int uid) {
         User user = this.userService.findById(uid);
         return ResponseEntity.ok(this.portfolioService.findAllUniqueStocks(user.getUid()));
     }
 
     /**
      * Endpoint that creates a new portfolio.
+     *
      * @param portfolio the body of portfolio that you want to create.
      * @return HTTP status CREATED if created, if not the INTERNAL_SERVER_ERROR.
-     * @exception JSONException  if an error occurs while creating the portfolio.
+     * @throws JSONException if an error occurs while creating the portfolio.
      */
     @PostMapping("")
-    public ResponseEntity<User> createPortfolio(@RequestBody Portfolio portfolio) {
+    public ResponseEntity<String> createPortfolio(@RequestBody Portfolio portfolio) {
         try {
             if(!this.portfolioService.add(portfolio)) {
-                return new ResponseEntity("Portfolio was not added", HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>("Portfolio was not added", HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            return new ResponseEntity("Portfolio was added", HttpStatus.CREATED);
+            return new ResponseEntity<>("Portfolio was added", HttpStatus.CREATED);
         }
         catch (JSONException e) {
             LOGGER.severe(SEVERE + e.getMessage());
-            return new ResponseEntity(JSONEEXCEPTIONMESSAGE, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(JSONEEXCEPTIONMESSAGE, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -98,22 +99,22 @@ public class PortfolioController {
      * @return HTTP status OK if updated, if not INTERNAL_SERVER_ERROR.
      * @exception JSONException  if an error occurs while updating the portfolio.
      */
-    @PutMapping("")
-    public ResponseEntity updatePortfolio(@PathVariable long id, @RequestBody Portfolio portfolio) {
+    @PutMapping("{id}")
+    public ResponseEntity<String> updatePortfolio(@PathVariable long id, @RequestBody Portfolio portfolio) {
         try {
             Portfolio oldPortfolio = this.portfolioService.findById(id);
             if(oldPortfolio == null) {
-                return new ResponseEntity("didn't find portfolio", HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>("didn't find portfolio", HttpStatus.NOT_FOUND);
             }
             this.portfolioService.update(id,portfolio);
             if(this.portfolioService.findById(id) == null){
-                return new ResponseEntity("portfolio didn't update", HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>("portfolio didn't update", HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            return new ResponseEntity("portfolio was updated", HttpStatus.OK);
+            return new ResponseEntity<>("portfolio was updated", HttpStatus.OK);
         }
         catch (JSONException e) {
             LOGGER.severe(SEVERE + e.getMessage());
-            return new ResponseEntity(JSONEEXCEPTIONMESSAGE, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(JSONEEXCEPTIONMESSAGE, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -124,16 +125,16 @@ public class PortfolioController {
      * @exception JSONException  if an error occurs while deleting the portfolio.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity deletePortfolio(@PathVariable long id) {
+    public ResponseEntity<String> deletePortfolio(@PathVariable long id) {
         try {
             if(!this.portfolioService.delete(id)) {
-                return new ResponseEntity("Portfolio was not removed", HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>("Portfolio was not removed", HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            return new ResponseEntity("Portfolio was removed", HttpStatus.OK);
+            return new ResponseEntity<>("Portfolio was removed", HttpStatus.OK);
         }
         catch (JSONException e) {
             LOGGER.severe(SEVERE + e.getMessage());
-            return new ResponseEntity(JSONEEXCEPTIONMESSAGE, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(JSONEEXCEPTIONMESSAGE, HttpStatus.BAD_REQUEST);
         }
     }
 

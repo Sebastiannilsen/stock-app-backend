@@ -118,9 +118,7 @@ public class StockSimulationService {
             List<Stock> stocks = this.portfolioRepository.findUniqueStocksByUid(portfolio.getUser().getUid());
             double price = 0;
             for(Stock stock : stocks) {
-                Set<StockPurchase> purchases = portfolio.getStockPurchases();
-                StockPurchase currentPurchase = (StockPurchase) purchases.stream().filter(stockPurchase -> Objects.equals(stockPurchase.getSpid(), stock.getId()));
-                price += (currentPurchase.getPrice() - stock.getCurrentPrice());
+                price = price + stock.getCurrentPrice();
             }
             DecimalFormat decimalFormat = new DecimalFormat("#.##");
             price = round(price, 2);
