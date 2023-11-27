@@ -62,7 +62,7 @@ public class StockPurcheaseController {
      * stock purchase was not found
      */
     @GetMapping("/{id}")
-    public ResponseEntity<StockPurchase> getStockPurcheaseFormId(@PathVariable long id) {
+    public ResponseEntity<StockPurchase> getStockPurchaseFormId(@PathVariable long id) {
         StockPurchase stockPurchase = this.stockPurchaseService.findById(id);
         if (stockPurchase == null) {
             return ResponseEntity.notFound().build();
@@ -127,7 +127,6 @@ public class StockPurcheaseController {
     @DeleteMapping("/{userId}")
     public ResponseEntity<String> deleteStockPurchase(@PathVariable long userId, @RequestBody String json) {
         JSONObject stockId = new JSONObject(json);
-
         try {
             if (!this.stockPurchaseService.delete(userId, stockId.getLong("id"))) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("stockPurchase was not removed");

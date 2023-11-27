@@ -65,3 +65,21 @@ The REST API supports the following endpoints:
    - GET("/sessionuser"): Returns the current session user.
 
 
+# Running the Project
+
+Before running the project, ensure that you have set up a PostgreSQL database and update the database configuration in both the `application.properties` and `env.properties` files.
+
+**application.properties:**
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/your_database_name
+spring.datasource.username=your_database_username
+spring.datasource.password=your_database_password
+```
+
+After configuring the database, navigate to the root directory of the project and run the following command in the terminal:
+```shell
+mvn spring-boot:run
+```
+This command will build and run the Spring Boot application. Make sure Maven is installed on your system before executing the command.
+
+Once the application is running, you can access it in your web browser at the specified address. If any issues arise during the setup, double-check your database configuration and ensure that all dependencies are installed.

@@ -55,7 +55,12 @@ public class StockPurchaseService {
     }
 
 
-
+    /**
+     * Method for deleting a stockPurchase
+     * @param portfolioId the portfolio id
+     * @param stockId the stock id
+     * @return true if deleted, otherwise false
+     */
     public boolean delete(long portfolioId, long stockId) {
         // check if the user owns the stock
         List<StockPurchase> stockPurchases = StreamSupport.stream(getAll().spliterator(), false)
