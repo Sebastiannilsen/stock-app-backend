@@ -2,6 +2,7 @@ package ntnu.idata2503.group9.stockappbackend.Controllers;
 
 import ntnu.idata2503.group9.stockappbackend.Models.Stock;
 import ntnu.idata2503.group9.stockappbackend.Models.User;
+import ntnu.idata2503.group9.stockappbackend.Repository.ListRepository;
 import ntnu.idata2503.group9.stockappbackend.Services.ListService;
 import ntnu.idata2503.group9.stockappbackend.Services.StockService;
 import ntnu.idata2503.group9.stockappbackend.Services.UserService;
@@ -36,6 +37,9 @@ public class ListController {
 
     @Autowired
     private StockService stockService;
+
+    @Autowired
+    private ListRepository listRepository;
 
     private static final String JSONEEXCEPTIONMESSAGE = "The Field(s) in the request is missing or is null";
     private static final String SEVERE = "An error occurred: ";
@@ -134,6 +138,9 @@ public class ListController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteUser(@PathVariable long id) {
         try {
+            ntnu.idata2503.group9.stockappbackend.Models.List list = this.listService.findById(id);
+            list.getStocks().clear();
+            this.listRepository.save(list);
             if(!this.listService.delete(id)) {
                 return new ResponseEntity<>("List was not removed", HttpStatus.INTERNAL_SERVER_ERROR);
             }
