@@ -1,5 +1,6 @@
 package ntnu.idata2503.group9.stockappbackend.Controllers;
 
+import ntnu.idata2503.group9.stockappbackend.Models.CandlestickData;
 import ntnu.idata2503.group9.stockappbackend.Models.PortfolioHistory;
 import ntnu.idata2503.group9.stockappbackend.Repository.PortfolioHistoryRepository;
 import org.json.JSONObject;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Rest controller that controls the endpoints for the portfolio history.
@@ -29,6 +32,7 @@ public class PortfolioHistoryController {
 
     /**
      * Endpoint that returns all portfolio histories.
+     *
      * @param pid the id of the portfolio that you want to return
      * @return all portfolio histories as a list
      */
@@ -39,7 +43,59 @@ public class PortfolioHistoryController {
     }
 
     /**
+     * Endpoint that returns all portfolio histories.
+     *
+     * @param pid the id of the portfolio that you want to return
+     * @return all portfolio histories as a list
+     */
+    @GetMapping("/portfolios/candleStick/{pid}")
+    public ResponseEntity<List<CandlestickData>> getCandlestickDataByPortfolioId(@PathVariable long pid) {
+        List<PortfolioHistory> portfolioHistories = this.portfolioHistoryRepository.findByPortfolioPid(pid);
+
+        List<CandlestickData> candlestickDataList = convertToCandlestickData(portfolioHistories);
+
+        return ResponseEntity.ok(candlestickDataList);
+    }
+
+    private List<CandlestickData> convertToCandlestickData(List<PortfolioHistory> portfolioHistories) {
+        List<CandlestickData> candlestickDataList = new ArrayList<>();
+        Random random = new Random();
+
+        for (int i = 0; i < portfolioHistories.size(); i++) {
+            PortfolioHistory current = portfolioHistories.get(i);
+
+            if (i > 0) {
+                PortfolioHistory previous = portfolioHistories.get(i - 1);
+
+                // Generate a random offset between 2 and 7
+                double offsetLow = (5 * random.nextDouble());
+                double offsetHigh = (5 * random.nextDouble());
+
+                // Simulate data where low and high values are different from open and close
+                double open = previous.getPrice();
+                double close = current.getPrice();
+                double low = Math.min(open, close) - offsetLow;
+                double high = Math.max(open, close) + offsetHigh;
+
+                CandlestickData candlestickData = new CandlestickData(
+                        open,
+                        close,
+                        round(low,2),
+                        round(high,2),
+                        current.getDate()
+                );
+
+                candlestickDataList.add(candlestickData);
+            }
+        }
+
+        return candlestickDataList;
+    }
+
+
+    /**
      * Endpoint that returns the value of a portfolio at a given time.
+     *
      * @param pid the id of the portfolio that you want to return
      * @return the value of a portfolio at a given time as monetary change and percentage change
      */
@@ -61,7 +117,7 @@ public class PortfolioHistoryController {
         // Creating a JSON object with keys and values
         JSONObject jsonObject = new JSONObject()
                 .put("monetaryChange", round(monetaryChange, 2))
-                .put("percentageChange", round(percentageChange,2));
+                .put("percentageChange", round(percentageChange, 2));
 
         return ResponseEntity.ok(jsonObject.toString());
     }
