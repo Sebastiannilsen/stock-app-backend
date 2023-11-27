@@ -1,10 +1,15 @@
 package ntnu.idata2503.group9.stockappbackend.Models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.Date;
 
+/**
+ * Class that represent a stock history.
+ * 
+ * @author Gruppe...
+ * @version 1.0
+ */
 @Entity
 @Table(name = "stock_history")
 public class StockHistory {
@@ -20,8 +25,6 @@ public class StockHistory {
     @JoinColumn(name = "stock_id")
     @JsonBackReference(value = "stockhistory-stock")
     private Stock stock;
-
-
 
     public StockHistory(double price, Date date, Stock stock) {
         setPrice(price);

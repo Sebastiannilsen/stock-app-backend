@@ -12,6 +12,9 @@ import java.util.List;
 
 /**
  * Rest controller that controls the endpoints for the stock.
+ * 
+ * @author Gruppe...
+ * @version 1.0
  */
 @RestController
 @RequestMapping("/api/stocks")
@@ -26,12 +29,21 @@ public class StockController {
         this.stockService = stockService;
     }
 
+    /**
+     * Endpoint that returns all stocks.
+     * @return all stocks
+     */
     @GetMapping
     public ResponseEntity<List<Stock>> getAllStocks() {
         List<Stock> stocks = stockService.getAllStocks();
         return ResponseEntity.ok(stocks);
     }
 
+    /**
+     * Endpoint that returns a stock based on the stock id
+     * @param id the id of the stock that you want to return
+     * @return the stock and HTTP status OK or http status NOT_FOUNd if stock was not found
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Stock> getStockById(@PathVariable long id) {
         Stock stock = stockService.getStockById(id);
@@ -42,6 +54,12 @@ public class StockController {
         }
     }
 
+    /**
+     * Endpoint that updates a stock based on the stock id
+     * @param id the id of the stock that you want to return
+     * @param stock the stock that you want to update
+     * @return the stock and HTTP status OK or http status NOT_FOUNd if stock was not found
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Stock> updateStock(@PathVariable long id, @RequestBody Stock stock) {
         if (stockService.update(id, stock)) {
@@ -51,11 +69,15 @@ public class StockController {
         }
     }
 
+    /**
+     * Endpoint that returns all stocks based on the list id
+     * @param lid the id of the list that you want to return stocks from
+     * @return the stocks and HTTP status OK or HTTP status NOT_FOUND if stocks was not found
+     */
     @GetMapping("/lists/{lid}/stocks")
-    public ResponseEntity<List<Stock>> getAllStocksByListsLid(@PathVariable(value = "lid")long lid) {
+    public ResponseEntity<List<Stock>> getAllStocksByListsLid(@PathVariable(value = "lid") long lid) {
         List<Stock> stocks = this.stockRepository.findStocksByListsLid(lid);
         return new ResponseEntity<>(stocks, HttpStatus.OK);
     }
 
 }
-

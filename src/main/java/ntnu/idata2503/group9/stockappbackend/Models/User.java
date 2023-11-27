@@ -1,6 +1,5 @@
 package ntnu.idata2503.group9.stockappbackend.Models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.HashSet;
@@ -37,11 +36,13 @@ public class User {
     /**
      * Empty constructor that is needed for JPA
      */
-    public User () {}
+    public User() {
+    }
 
     /**
      * Constructor for user.
-     * @param email the email of the user.
+     * 
+     * @param email    the email of the user.
      * @param password the password for the user.
      */
     public User(String email, String password) {
@@ -51,6 +52,7 @@ public class User {
 
     /**
      * Returns the user id
+     * 
      * @return uid
      */
     public Long getUid() {
@@ -59,6 +61,7 @@ public class User {
 
     /**
      * returns the email of the user
+     * 
      * @return email
      */
     public String getEmail() {
@@ -67,6 +70,7 @@ public class User {
 
     /**
      * Returns the password of the user
+     * 
      * @return email
      */
     public String getPassword() {
@@ -75,18 +79,20 @@ public class User {
 
     /**
      * Return lists.
+     * 
      * @return lists.
      */
     public Set<List> getLists() {
         return this.lists;
     }
 
-    public Portfolio getPortfolio(){
+    public Portfolio getPortfolio() {
         return this.portfolio;
     }
 
     /**
      * Sets the email of the user
+     * 
      * @param email email you want to set
      */
     public void setEmail(String email) {
@@ -95,6 +101,7 @@ public class User {
 
     /**
      * Sets the password of the user
+     * 
      * @param password password you want to set
      */
     public void setPassword(String password) {
@@ -103,6 +110,7 @@ public class User {
 
     /**
      * Sets the portfolio
+     * 
      * @param portfolio the portfolio you want to set
      */
     public void setPortfolio(Portfolio portfolio) {
@@ -111,6 +119,7 @@ public class User {
 
     /**
      * Checks if the user is valid
+     * 
      * @return boolean. True if valid, false if not.
      */
     public boolean isValid() {
@@ -120,6 +129,7 @@ public class User {
     /**
      * Checks if the user is active
      * Used for security
+     * 
      * @return Boolean statement. True if active, false if not
      */
     public boolean isActive() {
@@ -133,7 +143,9 @@ public class User {
     /**
      * Sets if the user is active or not.
      * Used for security
-     * @param active Set boolean statement. Set true if user is active, set false if not
+     * 
+     * @param active Set boolean statement. Set true if user is active, set false if
+     *               not
      */
     public void setActive(boolean active) {
         this.active = active;

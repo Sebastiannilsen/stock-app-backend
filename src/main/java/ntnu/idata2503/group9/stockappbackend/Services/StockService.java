@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Represent the service class for Stock
+ */
 @Service
 public class StockService {
     private final StockRepository stockRepository;

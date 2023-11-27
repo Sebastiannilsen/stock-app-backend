@@ -1,8 +1,6 @@
 package ntnu.idata2503.group9.stockappbackend.Models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,11 +21,7 @@ public class List {
     private String name;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "list_stock",
-            joinColumns = @JoinColumn(name = "list_id"),
-            inverseJoinColumns = @JoinColumn(name = "stock_id")
-    )
+    @JoinTable(name = "list_stock", joinColumns = @JoinColumn(name = "list_id"), inverseJoinColumns = @JoinColumn(name = "stock_id"))
     private Set<Stock> stocks = new HashSet<>();
 
     @ManyToOne
@@ -38,10 +32,12 @@ public class List {
     /**
      * Empty constructor that is needed for JPA
      */
-    public List() {}
+    public List() {
+    }
 
     /**
      * Constructor for list.
+     * 
      * @param name the name of the list.
      */
     public List(String name, User user) {
@@ -51,6 +47,7 @@ public class List {
 
     /**
      * Sets the list name.
+     * 
      * @param name the name you want for the list.
      */
     public void setName(String name) {
@@ -59,6 +56,7 @@ public class List {
 
     /**
      * Set user.
+     * 
      * @param user the user you want to set.
      */
     public void setUser(User user) {
@@ -67,6 +65,7 @@ public class List {
 
     /**
      * Returns the list id.
+     * 
      * @return lid.
      */
     public Long getLid() {
@@ -75,6 +74,7 @@ public class List {
 
     /**
      * Returns the list name.
+     * 
      * @return name.
      */
     public String getName() {
@@ -83,6 +83,7 @@ public class List {
 
     /**
      * Returns stocks
+     * 
      * @return stocks
      */
     public Set<Stock> getStocks() {
@@ -95,6 +96,7 @@ public class List {
 
     /**
      * Return user.
+     * 
      * @return user.
      */
     public User getUser() {
@@ -103,6 +105,7 @@ public class List {
 
     /**
      * Checks if the list is valid.
+     * 
      * @return Boolean statement. True if the list is valid, false if not.
      */
     public boolean isValid() {
@@ -111,6 +114,7 @@ public class List {
 
     /**
      * Add stock to the list
+     * 
      * @param stock the stock you want to add
      */
     public void addStockToList(Stock stock) {

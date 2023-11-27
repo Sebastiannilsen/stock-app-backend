@@ -1,11 +1,15 @@
 package ntnu.idata2503.group9.stockappbackend.Models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Cascade;
-
 import java.util.Date;
+
+/**
+ * Class that represent a portfolio history.
+ * 
+ * @author Gruppe...
+ * @version 1.0
+ */
 
 @Entity
 @Table(name = "portfoliohistory")
@@ -28,7 +32,8 @@ public class PortfolioHistory {
         setPortfolio(portfolio);
     }
 
-    public PortfolioHistory() {}
+    public PortfolioHistory() {
+    }
 
     public Long getPhid() {
         return phid;

@@ -15,8 +15,12 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- * Rest controller that controls the endpoint for the list.
- *
+ * This class is a REST controller for managing lists.
+ * It provides endpoints for getting all lists, getting a list by its ID, getting lists by user ID,
+ * creating a new list, updating an existing list, deleting a list, and adding a stock to a list.
+ * 
+ * It uses services for list, user, and stock to perform its operations.
+ * 
  * @author Gruppe..
  * @version 1.0
  */
@@ -44,8 +48,8 @@ public class ListController {
     @GetMapping("")
     public ResponseEntity<List<ntnu.idata2503.group9.stockappbackend.Models.List>> getLists() {
         Iterable<ntnu.idata2503.group9.stockappbackend.Models.List> lists = this.listService.getAll();
-        if(!lists.iterator().hasNext()) {
-            return new ResponseEntity("Didn't find lists", HttpStatus.NOT_FOUND);
+        if (!lists.iterator().hasNext()) {
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok((List<ntnu.idata2503.group9.stockappbackend.Models.List>) lists);
     }
@@ -59,11 +63,16 @@ public class ListController {
     public ResponseEntity<ntnu.idata2503.group9.stockappbackend.Models.List> getListFromId(@PathVariable long id) {
         ntnu.idata2503.group9.stockappbackend.Models.List list = this.listService.findById(id);
         if(list == null) {
-            return new ResponseEntity("Didn't find list", HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(list);
     }
 
+    /**
+     * Endpoint that returns all lists based on the user id
+     * @param uid the id of the user that you want to return lists from
+     * @return the lists and HTTP status OK or HTTP status NOT_FOUND if lists was not found
+     */
     @GetMapping("/listsbyuid/{uid}")
     public ResponseEntity<List<ntnu.idata2503.group9.stockappbackend.Models.List>> getListFormUid(@PathVariable long uid) {
         User user = this.userService.findById(uid);
@@ -78,18 +87,18 @@ public class ListController {
      * @exception JSONException  if an error occurs while creating the list.
      */
     @PostMapping("")
-    public ResponseEntity<ntnu.idata2503.group9.stockappbackend.Models.List> createList(@RequestBody ntnu.idata2503.group9.stockappbackend.Models.List list) {
+    public ResponseEntity<Object> createList(@RequestBody ntnu.idata2503.group9.stockappbackend.Models.List list) {
         try {
-            if(!this.listService.add(list)) {
-                return new ResponseEntity("List was not added", HttpStatus.INTERNAL_SERVER_ERROR);
+            if (!this.listService.add(list)) {
+                return ResponseEntity.notFound().build();
             }
-            return new ResponseEntity("List was added", HttpStatus.CREATED);
-        }
-        catch (JSONException e) {
+            return ResponseEntity.ok().build();
+        } catch (JSONException e) {
             LOGGER.severe(SEVERE + e.getMessage());
-            return new ResponseEntity(JSONEEXCEPTIONMESSAGE, HttpStatus.BAD_REQUEST);
+            return ResponseEntity.badRequest().body(JSONEEXCEPTIONMESSAGE);
         }
     }
+
 
     /**
      * Endpoint that update a list.
@@ -99,21 +108,20 @@ public class ListController {
      * @exception JSONException  if an error occurs while updating the list.
      */
     @PutMapping("")
-    public ResponseEntity updateList(@PathVariable long id, @RequestBody ntnu.idata2503.group9.stockappbackend.Models.List list) {
+    public ResponseEntity<Object> updateList(@PathVariable long id, @RequestBody ntnu.idata2503.group9.stockappbackend.Models.List list) {
         try {
             ntnu.idata2503.group9.stockappbackend.Models.List oldList = this.listService.findById(id);
-            if(oldList == null) {
-                return new ResponseEntity("Didn't find list", HttpStatus.NOT_FOUND);
+            if (oldList == null) {
+                return ResponseEntity.notFound().build();
             }
-            this.listService.update(id,list);
-            if(this.listService.findById(id) == null) {
-                return new ResponseEntity("List didn't update", HttpStatus.INTERNAL_SERVER_ERROR);
+            this.listService.update(id, list);
+            if (this.listService.findById(id) == null) {
+                return new ResponseEntity<>("List didn't update", HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            return new ResponseEntity("List was updated", HttpStatus.OK);
-        }
-        catch (JSONException e) {
+            return new ResponseEntity<>("List was updated", HttpStatus.OK);
+        } catch (JSONException e) {
             LOGGER.severe(SEVERE + e.getMessage());
-            return new ResponseEntity(JSONEEXCEPTIONMESSAGE, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(JSONEEXCEPTIONMESSAGE, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -124,23 +132,35 @@ public class ListController {
      * @exception JSONException  if an error occurs while deleting the list.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteUser(@PathVariable long id) {
+    public ResponseEntity<Object> deleteUser(@PathVariable long id) {
         try {
             if(!this.listService.delete(id)) {
-                return new ResponseEntity("List was not removed", HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>("List was not removed", HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            return new ResponseEntity("List was removed", HttpStatus.OK);
+            return new ResponseEntity<>("List was removed", HttpStatus.OK);
         }
         catch (JSONException e) {
             LOGGER.severe(SEVERE + e.getMessage());
-            return new ResponseEntity(JSONEEXCEPTIONMESSAGE, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(JSONEEXCEPTIONMESSAGE, HttpStatus.BAD_REQUEST);
         }
     }
 
+    /**
+     * Endpoint that adds a stock to a list.
+     * @param lid the id of the list that you want to add the stock to
+     * @param stock the stock that you want to add to the list
+     * @return HTTP status OK if added, if not INTERNAL_SERVER_ERROR.
+     */
     @PostMapping("/addStock/{lid}")
-    public ResponseEntity addStockToList(@PathVariable long lid, @RequestBody Stock stock) {
-        Stock stock1 = stockService.getStockById(stock.getId());
+    public ResponseEntity<Object> addStockToList(@PathVariable long lid, @RequestBody Stock stock) {
+        try{
+            Stock stock1 = stockService.getStockById(stock.getId());
         this.listService.addStockToList(lid, stock1);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
+        } catch (JSONException e) {
+            LOGGER.severe(SEVERE + e.getMessage());
+            return new ResponseEntity<>(JSONEEXCEPTIONMESSAGE, HttpStatus.BAD_REQUEST);
+        }
+        
     }
 }

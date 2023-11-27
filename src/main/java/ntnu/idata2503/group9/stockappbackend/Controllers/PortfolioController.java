@@ -16,6 +16,7 @@ import ntnu.idata2503.group9.stockappbackend.Models.Stock;
 
 /**
  * Rest controller that controls the endpoints for the portfolio.
+ 
  *
  * @author Gruppe...
  * @version 1.0
@@ -39,12 +40,12 @@ public class PortfolioController {
      * @return all portfolios
      */
     @GetMapping("")
-    public ResponseEntity<List<Portfolio>> getPortfolios() {
+    public ResponseEntity<Iterable<Portfolio>> getPortfolios() {
         Iterable<Portfolio> portfolios = this.portfolioService.getAll();
         if (!portfolios.iterator().hasNext()) {
-            return new ResponseEntity("Didn't find portfolios", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return ResponseEntity.ok((List<Portfolio>) portfolios);
+        return ResponseEntity.ok(portfolios);
     }
 
     /**
@@ -55,8 +56,8 @@ public class PortfolioController {
     @GetMapping("/{id}")
     public ResponseEntity<Portfolio> getPortfolioFromId(@PathVariable long id) {
         Portfolio portfolio = this.portfolioService.findById(id);
-        if(portfolio == null) {
-            return new ResponseEntity("Didn't find portfolio", HttpStatus.NOT_FOUND);
+        if (portfolio == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok(portfolio);
     }

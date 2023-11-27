@@ -123,6 +123,10 @@ public class Stock {
         this.stockPurchases = stockPurchases;
     }
 
+    /**
+     * Updates the percent change in price since opening
+     * 
+     */
     public void updatePercentChangeIntraday() {
         double rawPercentChange = (this.currentPrice - this.openingPrice) / this.openingPrice * 100;
         this.percentChangeIntraday = Math.round(rawPercentChange * 100.0) / 100.0;

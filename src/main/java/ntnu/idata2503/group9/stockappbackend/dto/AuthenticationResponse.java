@@ -1,5 +1,9 @@
 package ntnu.idata2503.group9.stockappbackend.dto;
 
+/**
+ * DTO for authentication response.
+ * 
+ */
 public class AuthenticationResponse {
     private final String jwt;
 

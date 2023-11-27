@@ -2,7 +2,6 @@ package ntnu.idata2503.group9.stockappbackend.Models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Cascade;
 
 import java.util.Date;
 
@@ -37,13 +36,13 @@ public class StockPurchase {
     @JsonBackReference(value = "portfolio_stockpurchase")
     private Portfolio portfolio;
 
-
     /**
      * Default constructor.
-     * @param date the date you want to set.
-     * @param price the price you want to set.
-     * @param quantity the quantity of stock you want to set.
-     * @param stock the type of stock you want to set.
+     * 
+     * @param date      the date you want to set.
+     * @param price     the price you want to set.
+     * @param quantity  the quantity of stock you want to set.
+     * @param stock     the type of stock you want to set.
      * @param portfolio the portfolio this purchase belong to.
      */
     public StockPurchase(Date date, float price, int quantity, Stock stock, Portfolio portfolio) {

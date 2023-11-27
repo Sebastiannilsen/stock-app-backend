@@ -1,5 +1,8 @@
 package ntnu.idata2503.group9.stockappbackend.dto;
 
+/**
+ * DTO for authentication request.
+ */
 public class AuthenticationRequest {
     private String email;
     private String password;

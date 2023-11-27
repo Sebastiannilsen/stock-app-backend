@@ -1,7 +1,5 @@
 package ntnu.idata2503.group9.stockappbackend.Services;
 
-import ntnu.idata2503.group9.stockappbackend.Models.Portfolio;
-import ntnu.idata2503.group9.stockappbackend.Models.PortfolioHistory;
 import ntnu.idata2503.group9.stockappbackend.Models.Stock;
 import ntnu.idata2503.group9.stockappbackend.Models.StockPurchase;
 import ntnu.idata2503.group9.stockappbackend.Repository.PortfolioHistoryRepository;
@@ -17,8 +15,7 @@ import org.springframework.stereotype.Service;
  * @version 1.0
  */
 @Service
-public class
-StockPurchaseService {
+public class StockPurchaseService {
 
     @Autowired
     StockPurchaseRepository stockPurchaseRepository;
@@ -28,7 +25,6 @@ StockPurchaseService {
 
     @Autowired
     PortfolioHistoryRepository portfolioHistoryRepository;
-
 
     public Iterable<StockPurchase> getAll() {
         return this.stockPurchaseRepository.findAll();
@@ -44,9 +40,7 @@ StockPurchaseService {
 
     public boolean add(StockPurchase stockPurchase) {
         boolean added = false;
-        if(canBeAdded(stockPurchase)) {
-            Portfolio portfolio = stockPurchase.getPortfolio();
-            PortfolioHistory portfolioHistory = new PortfolioHistory();
+        if (canBeAdded(stockPurchase)) {
             this.stockPurchaseRepository.save(stockPurchase);
             added = true;
         }
@@ -55,7 +49,7 @@ StockPurchaseService {
 
     public boolean delete(long id) {
         boolean deleted = false;
-        if(findById(id) != null) {
+        if (findById(id) != null) {
             this.stockPurchaseRepository.deleteById(id);
             deleted = true;
         }
@@ -70,8 +64,7 @@ StockPurchaseService {
         }
         if (stockPurchase == null || !stockPurchase.isValid()) {
             errorMessage = "Wrong data in request body";
-        }
-        else if(stockPurchase.getSpid() != id) {
+        } else if (stockPurchase.getSpid() != id) {
             errorMessage = "The ID of the user in the URL does not match anny ID in the JSON data";
         }
         if (errorMessage == null) {

@@ -10,26 +10,27 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.text.DecimalFormat;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
+/**
+ * Service class for simulating stock prices.
+ * This class is responsible for simulating stock prices and updating the
+ * database.
+ * 
+ * @author Grupe...
+ * @version 1.0
+ */
 @Service
 @EnableScheduling
 public class StockSimulationService {
 
     private final StockRepository stockRepository;
-    private final ScheduledExecutorService scheduler;
     private final Random random = new Random();
 
     @Autowired
     public StockSimulationService(StockRepository stockRepository) {
         this.stockRepository = stockRepository;
-        this.scheduler = Executors.newSingleThreadScheduledExecutor();
         startSimulation();
     }
 
@@ -42,14 +43,20 @@ public class StockSimulationService {
     @Autowired
     PortfolioHistoryRepository portfolioHistoryRepository;
 
+    /**
+     * Starts the stock simulation.
+     */
     public void startSimulation() {
         // Add 30 different stocks (you can customize this as per your requirements)
         addInitialStocks();
 
         // Schedule price updates every 10 seconds
-        ScheduledFuture<?> priceUpdateHandle = scheduler.scheduleAtFixedRate(this::updateStockPrices, 0, 10, TimeUnit.SECONDS);
+        //scheduler.scheduleAtFixedRate(this::updateStockPrices, 0, 10, TimeUnit.SECONDS);
     }
 
+    /**
+     * Adds dummy stocks to the database if the database is empty.
+     */
     private void addInitialStocks() {
         // You can create and save 30 different stocks with initial prices here.
         // For the sake of brevity, let's assume you have predefined stock data.
@@ -75,12 +82,18 @@ public class StockSimulationService {
         Stock stock19 = new Stock("SALM", "SalMar ASA", 164.1, +0.24);
         Stock stock20 = new Stock("GJF", "Gjensidige Forsikring ASA", 164.1, -0.24);
         // ... add more stocks
-        if (!stockRepository.findAll().iterator().hasNext()){
-            stockRepository.saveAll(List.of(stock1, stock2, stock3, stock4, stock5, stock6, stock7, stock8, stock9, stock10, stock11, stock12, stock13, stock14, stock15, stock16, stock17, stock18, stock19, stock20));
+        if (!stockRepository.findAll().iterator().hasNext()) {
+            stockRepository.saveAll(List.of(stock1, stock2, stock3, stock4, stock5, stock6, stock7, stock8, stock9,
+                    stock10, stock11, stock12, stock13, stock14, stock15, stock16, stock17, stock18, stock19, stock20));
         }
 
     }
 
+    /**
+     * Changes all the stock prices in the database every 10 seconds.
+     * The price can go up or down by a random percentage between -0.4% and 0.4%.
+     */
+    @Scheduled(fixedRate = 10000)
     private void updateStockPrices() {
         List<Stock> stocks = (List<Stock>) stockRepository.findAll();
 
@@ -102,33 +115,46 @@ public class StockSimulationService {
         }
     }
 
+    /**
+     * Updates the stock history every 10 minutes.
+     */
     @Scheduled(fixedRate = 600000)
     private void updateStockHistory() {
         List<Stock> stocks = (List<Stock>) stockRepository.findAll();
-        for (Stock stock: stocks) {
+        for (Stock stock : stocks) {
             StockHistory stockHistory = new StockHistory(stock.getCurrentPrice(), new Date(), stock);
             stockHistoryRepository.save(stockHistory);
         }
     }
 
+    /**
+     * Updates the portfolio history every 10 minutes.
+     */
     @Scheduled(fixedRate = 600000)
     private void updatePortfolioHistory() {
         List<Portfolio> portfolios = (List<Portfolio>) this.portfolioRepository.findAll();
-        for(Portfolio portfolio : portfolios) {
+        for (Portfolio portfolio : portfolios) {
             List<Stock> stocks = this.portfolioRepository.findUniqueStocksByUid(portfolio.getUser().getUid());
             double price = 0;
-            for(Stock stock : stocks) {
+            for (Stock stock : stocks) {
                 price = price + stock.getCurrentPrice();
             }
-            DecimalFormat decimalFormat = new DecimalFormat("#.##");
+
             price = round(price, 2);
             PortfolioHistory portfolioHistory = new PortfolioHistory(price, new Date(), portfolio);
             this.portfolioHistoryRepository.save(portfolioHistory);
         }
     }
 
+    /**
+     * Rounds a double to a given number of decimal places.
+     * @param value the value to round
+     * @param places the number of decimal places
+     * @return the rounded value
+     */
     public static double round(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
+        if (places < 0)
+            throw new IllegalArgumentException();
 
         long factor = (long) Math.pow(10, places);
         value = value * factor;

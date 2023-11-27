@@ -1,14 +1,18 @@
 package ntnu.idata2503.group9.stockappbackend.Models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Cascade;
 
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Class that represent a portfolio.
+ * 
+ * @author Gruppe...
+ * @version 1.0
+ */
 @Entity
 @Table(name = "portfolio")
 public class Portfolio {
@@ -32,9 +36,9 @@ public class Portfolio {
     @JsonManagedReference(value = "portfolio_stockpurchase")
     private Set<StockPurchase> stockPurchases = new HashSet<>();
 
-
     /**
      * Constructor for portfolio.
+     * 
      * @param user the user you want to set that owns the portfolio.
      */
     public Portfolio(User user) {
@@ -44,10 +48,12 @@ public class Portfolio {
     /**
      * Constructor needed for JPA
      */
-    public Portfolio() {}
+    public Portfolio() {
+    }
 
     /**
      * Sets the user.
+     * 
      * @param user the user yo want to set
      */
     public void setUser(User user) {
@@ -56,6 +62,7 @@ public class Portfolio {
 
     /**
      * Return user.
+     * 
      * @return user.
      */
     public User getUser() {
@@ -64,6 +71,7 @@ public class Portfolio {
 
     /**
      * Returns portfolio id.
+     * 
      * @return pid.
      */
     public Long getPid() {
@@ -84,12 +92,12 @@ public class Portfolio {
 
     /**
      * Checks if the portfolio is valid
+     * 
      * @return boolean statement. True if portfolio is valid, false if not.
      */
     public boolean isValid() {
         return this.user != null;
     }
-
 
     public Set<PortfolioHistory> getPortfolioHistories() {
         return portfolioHistories;
@@ -98,6 +106,5 @@ public class Portfolio {
     public void setPortfolioHistories(Set<PortfolioHistory> portfolioHistories) {
         this.portfolioHistories = portfolioHistories;
     }
-
 
 }
