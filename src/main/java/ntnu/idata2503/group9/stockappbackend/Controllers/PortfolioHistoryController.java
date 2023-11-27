@@ -42,61 +42,6 @@ public class PortfolioHistoryController {
         return ResponseEntity.ok(portfolioHistories);
     }
 
-    /**
-     * Endpoint that returns all portfolio histories.
-     *
-     * @param pid the id of the portfolio that you want to return
-     * @return all portfolio histories as a list
-     */
-    @GetMapping("/portfolios/candleStick/{pid}")
-    public ResponseEntity<List<CandlestickData>> getCandlestickDataByPortfolioId(@PathVariable long pid) {
-        List<PortfolioHistory> portfolioHistories = this.portfolioHistoryRepository.findByPortfolioPid(pid);
-
-        List<CandlestickData> candlestickDataList = convertToCandlestickData(portfolioHistories);
-
-        return ResponseEntity.ok(candlestickDataList);
-    }
-
-    /**
-     * Method to convert a portfolioHistories object to candleStick format
-     * @param portfolioHistories the portfolio to be converted
-     * @return a List with candlestick points
-     */
-    private List<CandlestickData> convertToCandlestickData(List<PortfolioHistory> portfolioHistories) {
-        List<CandlestickData> candlestickDataList = new ArrayList<>();
-        Random random = new Random();
-
-        for (int i = 0; i < portfolioHistories.size(); i++) {
-            PortfolioHistory current = portfolioHistories.get(i);
-
-            if (i > 0) {
-                PortfolioHistory previous = portfolioHistories.get(i - 1);
-
-                // Generate a random offset between 2 and 7
-                double offsetLow = (5 * random.nextDouble());
-                double offsetHigh = (5 * random.nextDouble());
-
-                // Simulate data where low and high values are different from open and close
-                double open = previous.getPrice();
-                double close = current.getPrice();
-                double low = Math.min(open, close) - offsetLow;
-                double high = Math.max(open, close) + offsetHigh;
-
-                CandlestickData candlestickData = new CandlestickData(
-                        open,
-                        close,
-                        round(low,2),
-                        round(high,2),
-                        current.getDate()
-                );
-
-                candlestickDataList.add(candlestickData);
-            }
-        }
-
-        return candlestickDataList;
-    }
-
 
     /**
      * Endpoint that returns the value of a portfolio at a given time.
