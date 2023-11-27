@@ -31,7 +31,7 @@ public class PortfolioHistoryController {
     PortfolioHistoryRepository portfolioHistoryRepository;
 
     /**
-     * Endpoint that returns all portfolio histories.
+     * Endpoint that returns all portfolio histories as candleStick
      *
      * @param pid the id of the portfolio that you want to return
      * @return all portfolio histories as a list
@@ -57,6 +57,11 @@ public class PortfolioHistoryController {
         return ResponseEntity.ok(candlestickDataList);
     }
 
+    /**
+     * Method to convert a portfolioHistories object to candleStick format
+     * @param portfolioHistories the portfolio to be converted
+     * @return a List with candlestick points
+     */
     private List<CandlestickData> convertToCandlestickData(List<PortfolioHistory> portfolioHistories) {
         List<CandlestickData> candlestickDataList = new ArrayList<>();
         Random random = new Random();
