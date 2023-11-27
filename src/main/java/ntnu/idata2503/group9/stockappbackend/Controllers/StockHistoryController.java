@@ -4,6 +4,7 @@ import ntnu.idata2503.group9.stockappbackend.Models.CandlestickData;
 import ntnu.idata2503.group9.stockappbackend.Models.PortfolioHistory;
 import ntnu.idata2503.group9.stockappbackend.Models.StockHistory;
 import ntnu.idata2503.group9.stockappbackend.Services.StockHistorySevice;
+import ntnu.idata2503.group9.stockappbackend.Services.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,9 @@ public class StockHistoryController {
 
     @Autowired
     StockHistorySevice stockHistorySevice;
+
+    @Autowired
+    StockService stockService;
 
     /**
      * Endpoint that returns all stock histories.
@@ -65,19 +69,30 @@ public class StockHistoryController {
         List<CandlestickData> candlestickDataList = new ArrayList<>();
         Random random = new Random();
 
+        double currentPrice = stockService.getStockById(portfolioHistories.get(portfolioHistories.size() - 1).getStock().getId()).getCurrentPrice();
+
         for (int i = 0; i < portfolioHistories.size(); i++) {
             StockHistory current = portfolioHistories.get(i);
 
             if (i > 0) {
                 StockHistory previous = portfolioHistories.get(i - 1);
 
-                // Generate a random offset between 2 and 7
-                double offsetLow = (5 * random.nextDouble());
-                double offsetHigh = (5 * random.nextDouble());
+                // Generate a random offset between 0 and 0.1 times the price difference
+                double priceDifference = (current.getPrice() - previous.getPrice());
+                double offsetLow = priceDifference * (0.5 * random.nextDouble());
+                double offsetHigh = priceDifference * (0.5 * random.nextDouble());
 
                 // Simulate data where low and high values are different from open and close
                 double open = previous.getPrice();
-                double close = current.getPrice();
+
+                // if the stock is the last element
+                double close;
+                if (i == (portfolioHistories.size()-1)){
+                    close = currentPrice;
+                } else{
+                    close = current.getPrice();
+                }
+
                 double low = Math.min(open, close) - offsetLow;
                 double high = Math.max(open, close) + offsetHigh;
                 int volume = (random.nextInt(19) + 1);
@@ -85,11 +100,11 @@ public class StockHistoryController {
                 CandlestickData candlestickData = new CandlestickData(
                         open,
                         close,
-                        round(low,2),
-                        round(high,2),
+                        round(low, 2),
+                        round(high, 2),
                         current.getDate(),
                         volume
-                );
+                        );
 
                 candlestickDataList.add(candlestickData);
             }
