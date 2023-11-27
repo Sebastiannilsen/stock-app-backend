@@ -124,21 +124,25 @@ public class StockPurcheaseController {
      * @return HTTP status OK if deleted, if not INTERNAL_SERVER_ERROR.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable long id) {
-        try {
-            if (!this.stockPurchaseService.delete(id)) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("stockPurchase was not removed");
+    public ResponseEntity<String> deleteStockPurchase(@PathVariable long id) {
+        if(stockPurchaseService.findById(id) == null) {
+            try {
+                if (!this.stockPurchaseService.delete(id)) {
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("stockPurchase was not removed");
+                }
+                return ResponseEntity.ok("stockPurchase was removed");
+            } catch (JSONException e) {
+                LOGGER.severe(SEVERE + e.getMessage());
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(JSONEEXCEPTIONMESSAGE);
             }
-            return ResponseEntity.ok("stockPurchase was removed");
-        } catch (JSONException e) {
-            LOGGER.severe(SEVERE + e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(JSONEEXCEPTIONMESSAGE);
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("You do not own the stock you are trying to delete");
         }
     }
 
     /**
      * Endpoint that returns all stock purchases based on the portfolio id
-     * 
+     *
      * @param id the id of the portfolio that you want to return stock purchases
      *           from
      * @return the stock purchases and HTTP status OK or HTTP status NOT_FOUND if
@@ -146,6 +150,7 @@ public class StockPurcheaseController {
      */
     @GetMapping("/{id}/stockpurchease")
     public ResponseEntity<StockPurchase> getByStockStockId(@PathVariable long id) {
+        portfolioService.getAll().iterator();
         Stock stock = this.stockService.getStockById(id);
         StockPurchase stockPurchase = this.stockPurchaseService.findByStock(stock);
         return ResponseEntity.ok(stockPurchase);
