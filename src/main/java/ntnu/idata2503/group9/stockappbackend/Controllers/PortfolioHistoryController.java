@@ -51,7 +51,6 @@ public class PortfolioHistoryController {
      */
     @GetMapping("/portfolios/values/{pid}")
     public ResponseEntity<Object> getPortfolioHistoricValues(@PathVariable long pid) {
-        System.out.println("Endpoint called");
         List<PortfolioHistory> portfolioHistories = this.portfolioHistoryRepository.findByPortfolioPid(pid);
 
         if (portfolioHistories.isEmpty()) {
