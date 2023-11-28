@@ -82,7 +82,7 @@ mvn spring-boot:run
 ```
 This command will build and run the Spring Boot application. Make sure Maven is installed on your system before executing the command.
 
-Once the application is running, you can access it in your web browser at the specified address. If any issues arise during the setup, double-check your database configuration and ensure that all dependencies are installed.
+Once the application is running, you can access it in your web browser at the specified address (Default http://localhost:8080). If any issues arise during the setup, double-check your database configuration and ensure that all dependencies are installed.
 
 # Documentation 
 Class diagram
