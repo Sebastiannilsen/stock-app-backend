@@ -56,9 +56,18 @@ public class PortfolioHistoryController {
         if (portfolioHistories.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
+        double startPrice = 1;
+        for(PortfolioHistory portfolioHistory : portfolioHistories){
+            if (portfolioHistory.getPrice() != 0){
+                startPrice = portfolioHistory.getPrice();
+                break;
+            }
+        }
 
-        double startPrice = portfolioHistories.get(0).getPrice();
         double endPrice = portfolioHistories.get(portfolioHistories.size() - 1).getPrice();
+        if (endPrice == 0){
+            endPrice = 1;
+        }
 
         double monetaryChange = endPrice - startPrice;
         double percentageChange = (monetaryChange / startPrice) * 100;
